@@ -1,0 +1,94 @@
+
+<!--Here we want to display a header to the user and info about registyer page -->
+<ion-header>
+  <ion-toolbar  color="primary"> 
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Walkies</ion-title>
+  </ion-toolbar>
+  
+</ion-header>
+<ion-content [fullscreen]="true">
+
+<ion-content>
+<ion-content>
+  <div class="card-background"></div>
+  <div class="flex-view">
+    <div>
+      <h1 class="ion-text-center">Sign Up As Walker</h1>
+      <p class="ion-text-center">Sign up below to start walking dogs for an income. </p>
+    </div>
+
+    <!--Here we have tre card which dispays input for the email and password-->
+    <div class="input-card">
+      <!--FIRST NAME-->
+      <ion-item class="floating-input">
+        <ion-label position="floating">First Name</ion-label>
+        <ion-input  [(ngModel)]="firstName"></ion-input>
+      </ion-item>
+      <!--Last Name-->
+      <ion-item class="floating-input">
+        <ion-label position="floating">Last Name</ion-label>
+        <ion-input  [(ngModel)]="lastName"></ion-input>
+      </ion-item>
+       <!--Eircode-->
+       <ion-item class="floating-input">
+        <ion-label position="floating">Eircode</ion-label>
+        <ion-input  [(ngModel)]="eircode"></ion-input>
+      </ion-item>
+      <!--phone-->
+      <ion-item class="floating-input">
+        <ion-label position="floating">Phone Number</ion-label>
+        <ion-input  [(ngModel)]="phoneNumber"></ion-input>
+      </ion-item>
+        <!--County-->
+        <!--This needs to be changed to select box-->
+        <ion-item class="floating-input">
+          <ion-label position="floating">County</ion-label>
+          <ion-input  [(ngModel)]="county"></ion-input>
+        </ion-item>
+           <!--This needs to be changed to select box-->
+        <ion-item class="floating-input">
+          <ion-label position="floating">Address line</ion-label>
+          <ion-input  [(ngModel)]="addressLine"></ion-input>
+        </ion-item>
+
+      <!--Email-->
+      <ion-item class="floating-input">
+        <ion-label position="floating">E-mail</ion-label>
+        <ion-input  [(ngModel)]="email"></ion-input>
+      </ion-item>
+      <!--Password-->
+      <ion-item class="floating-input">
+        <ion-label position="floating">Password</ion-label>
+        <ion-input #passwordInput clearOnEdit="false" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password"></ion-input>
+        <ion-button slot="end"  shape="round" color="dark" fill="clear">    
+        </ion-button>
+      </ion-item>
+      <!--Confirm password-->
+      <ion-item class="floating-input">
+        <ion-label position="floating">Password</ion-label>
+        <ion-input clearOnEdit="false" type="password"></ion-input>
+      </ion-item>
+      <ion-button  class="custom-button" expand="block" (click)="SignUp()">
+        Sign up
+      </ion-button>
+    </div>
+    <div>
+      
+      <div class="ion-text-center social-auth">
+        <ion-icon name="logo-facebook"></ion-icon>
+        <ion-icon name="logo-google"></ion-icon>
+        <ion-icon name="logo-twitter"></ion-icon>
+      </div>
+
+      <div class="ion-text-center">
+        <ion-button fill="clear" [routerLink]="['/','login-walker']" routerDirection="back">
+          Have an account as a walker ? Sign in
+        </ion-button>
+        
+      </div>
+    </div>
+  </div>
+</ion-content>
