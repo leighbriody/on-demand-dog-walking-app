@@ -1,14 +1,13 @@
 <!--Header-->
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title style="width: 100%; position: absolute; left: 0; color: var(--ion-color-primary);">
-      Walkies - Find walkers
-    </ion-title>
+    <ion-title>Walkies</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
 
   <!--Here we will display the map-->
@@ -18,6 +17,8 @@
     </map-marker>
     <map-polyline>
     </map-polyline>
+
+ 
   </google-map>
 
   <!--Currently offline click button to start searching-->
@@ -51,12 +52,12 @@
                 € {{walker.price}}
               </ion-col>
               <ion-col>
-
+                {{walker.durationMins}} Mins
               </ion-col>
             </ion-row>
-            <ion-item>Walk request id {{walker.walkRequestId}}</ion-item>
+
             <ion-button
-              (click)="acceptWalkersRequest(walker.walkRequestId , walker.ownerEmail ,walker.walkerEmail , walker.lat , walker.lng)">
+              (click)="acceptWalkersRequest(walker.walkRequestId , walker.ownerEmail ,walker.walkerEmail , walker.lat , walker.lng , walker.price ,walker.numberPets, walker.durationMins)">
               Accept</ion-button>
             <ion-button>Decline </ion-button>
             <ion-button (click)="viewOnMap(walker)">View On Map </ion-button>

@@ -10,6 +10,11 @@ export class OwnerHomePage implements OnInit {
 
   constructor(private router: Router) { }
 
+  
+  slideOpts = {
+    initialSlide: 1,
+    speed: 400
+  };
   ngOnInit() {
   }
 

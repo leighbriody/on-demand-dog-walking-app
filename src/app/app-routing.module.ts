@@ -101,6 +101,14 @@ const routes: Routes = [
     path: 'rapid-walk-walker/:id',
     loadChildren: () => import('./pages/dog-walker/rapid-walk-walker/rapid-walk-walker.module').then( m => m.RapidWalkWalkerPageModule)
   },
+  {
+    path: 'my-walks-walker',
+    loadChildren: () => import('./pages/dog-walker/my-walks-walker/my-walks-walker.module').then( m => m.MyWalksWalkerPageModule)
+  },
+  {
+    path: 'my-walks-owner',
+    loadChildren: () => import('./pages/dog-owner/my-walks-owner/my-walks-owner.module').then( m => m.MyWalksOwnerPageModule)
+  },
  
 ];
 

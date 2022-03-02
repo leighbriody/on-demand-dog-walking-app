@@ -1,74 +1,234 @@
-<!--Header-->
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title style="width: 100%; position: absolute; left: 0; color: var(--ion-color-primary);">
-      Walkies - Find walkers
-    </ion-title>
+    <ion-title>Walkies</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
 
   <!--Here we will display the map-->
-  <google-map #mapel height="50%" width="100%" [zoom]="zoom" [center]="center">
-    <map-marker *ngFor="let marker of markers" [position]="marker.position" [label]="marker.label"
+  <google-map #mapel height="60%" width="100%" [zoom]="zoom" [center]="center"  *ngIf="walkFinished == false">
+    <!--Owner marker-->
+    <map-marker *ngFor="let marker of markersOwner" [position]="marker.position" [label]="marker.label"
       [title]="marker.title" [options]="marker.options">
     </map-marker>
-    <map-polyline>
+
+    <!--walker marker-->
+    <map-marker *ngFor="let marker of markersWalker" [position]="marker.position" [label]="marker.label"
+      [title]="marker.title" [options]="marker.options">
+    </map-marker>
+
+    <!--Live Walker markers -->
+    <map-marker *ngFor="let marker of liveWalkMarkers" [position]="marker.position" [label]="marker.label"
+      [title]="marker.title" [options]="marker.options">
+    </map-marker>
+    <map-polyline [options]="polylineOptions">
     </map-polyline>
+
+    
   </google-map>
 
-  <!--If walk not in progress show this-->
-  <ion-card>
-    <ion-item>
-      <ion-icon name="pin" slot="start"></ion-icon>
-      <ion-label>Waiting for walker to start walk.</ion-label>
-    </ion-item>
-    <ion-list lines="none">
-      <ion-item>
-        <ion-button fill="outline" slot="end" class="view-me-btn">View me</ion-button>
-        <ion-button slot="end" class="view-walker-btn">View walker</ion-button>
-      </ion-item>
-    </ion-list>
-    <ion-card-content>
-      The walker will be on his way to you shorty.
-      Once he has arrived and starts the walk you can view it.
-    </ion-card-content>
+
+
+ <!--Stats on the walk - (ONLY SHOW IF WALK IN PROGRESSS)-->
+
+  <!--*ngIf="walkInProgress"-->
+  <ion-card *ngIf="walkInProgress && walkFinished == false" >
+    <ion-grid>
+ 
+      <ion-row>
+
+        <ion-col>
+          <ion-button color="danger">Live</ion-button>
+        </ion-col>
+      <ion-col>
+        <ion-button fill="outline">{{seconds}} seconds </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button fill="outline">{{length}} meters </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+       
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   </ion-card>
 
-  <!--Stats on the walk - (ONLY SHOW IF WALK IN PROGRESSS)-->
-  <ion-card *ngIf="walkInProgress">
-    <ion-row>
-      <ion-col>
-        <ion-list lines="none">
-          <ion-item>
-            <ion-button slot="end">Live</ion-button>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-      <ion-col>
-        <ion-list lines="none">
-          <ion-item>
-            <ion-button fill="outline" slot="end">0hr 0min 0s</ion-button>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-      <ion-col>
-        <ion-list lines="none">
-          <ion-item>
-            <ion-button fill="outline" slot="end">0 km</ion-button>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-button class="end-walk-btn">END WALK</ion-button>
-      </ion-col>
-    </ion-row>
+  <!--If walk not in progress show this-->
+  <ion-card *ngIf="walkInProgress == false && walkFinished == false" >
+  <ion-item>The walker is on their way</ion-item>
+
+    <ion-item lines="none">
+      <ion-avatar slot="start">
+        <img src="../../../../assets/img/find-walks/user1.jpg">
+      </ion-avatar>
+      <ion-label>
+        <h5> x km away</h5>
+        <h2>{{walkerName}}</h2>
+        <h3>{{walkerEmail}}</h3>
+        <p>
+          <ion-icon name="star-outline"></ion-icon>
+          <ion-icon name="star-outline"></ion-icon>
+          <ion-icon name="star-outline"></ion-icon>
+          <ion-icon name="star-outline"></ion-icon>
+          <ion-icon name="star-outline"></ion-icon>
+        </p>
+        <ion-row>
+          <ion-col>
+            {{numDogs}} dogs <ion-icon name="paw"></ion-icon>
+          </ion-col>
+          <ion-col>
+            € {{price}}
+          </ion-col>
+          <ion-col>
+            {{expectedDuration}} Minutes
+          </ion-col>
+        </ion-row>
+
+        <ion-button>
+          View Walker Location
+        </ion-button>
+      </ion-label>
+    </ion-item>
+
   </ion-card>
+  
+
+    <!--Walk completed card-->
+    <ion-card class="walk-complete-card" *ngIf="walkFinished == true">
+      <h2 class="walk-complete-text">Walk completed !</h2>
+      <h3 class="walk-complete-text">Your furry friend(s) have been walked !</h3>
+      <!--Owner of dogs-->
+      <ion-list lines="none">
+        <ion-item>
+          Walked by
+        </ion-item>
+      </ion-list>
+      <ion-item>
+        <ion-row>
+          <ion-col>
+            <ion-avatar item-start>
+              <img src="../../../../assets/img/dogOwner.png">
+            </ion-avatar>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            {{walkerName}}
+          </ion-col>
+        </ion-row>
+      </ion-item>
+  
+      <!--Pets Walked-->
+      <ion-list lines="none">
+        <ion-item>
+          Pet(s) walked:
+        </ion-item>
+      </ion-list>
+  
+      <ion-item>
+        <ion-row>
+          <ion-col>
+            <ion-avatar item-start>
+              <img src="../../../../assets/img/rapid-walk-walker/paw.png">
+            </ion-avatar>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            {{numDogs}}
+          </ion-col>
+  
+        </ion-row>
+      </ion-item>
+  
+  
+      <!--Walk Details-->
+      <ion-list lines="none">
+        <ion-item>
+          Walk Details
+        </ion-item>
+      </ion-list>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h3>Duration</h3>
+          </ion-col>
+          <ion-col>
+            <h3>Distance</h3>
+          </ion-col>
+          <ion-col>
+            <h3>Price</h3>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h4>{{walkHrs}}hr {{walkMinutes}}m {{walkSeconds}}s</h4>
+          </ion-col>
+          <ion-col>
+            <h4>{{length}} meters </h4>
+          </ion-col>
+          <ion-col>
+            <h4>€{{price}}</h4>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  
+      <!--Leave a review-->
+      <ion-list lines="none">
+        <ion-item>
+          Leave a review
+        </ion-item>
+      </ion-list>
+  
+      <ion-item>
+        <ion-row>
+          <ion-col>
+            <ion-label>Rating /5</ion-label>
+            <ion-input  [(ngModel)]="rating"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-label >Write some text here about your experience</ion-label>
+            <ion-textarea placeholder="Enter a review here .."  [(ngModel)]="reviewText">
+  
+            </ion-textarea>
+          </ion-col>
+  
+        </ion-row>
+      </ion-grid>
+  
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button outline="outline" color="secondary" class="review-btn" (click)="skip()">SKIP</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button color="primary" class="review-btn" (click)="postReview()">POST REVIEW</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  
+    </ion-card>
+    <!--Walk completed card end-->
+    
+  
+  
+  
+
+
+
+
 
   <!--Chatbox-->
 

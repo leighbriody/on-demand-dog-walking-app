@@ -1,12 +1,10 @@
 <!--Header-->
 <ion-header>
-  <ion-toolbar  > 
+  <ion-toolbar  color="primary"> 
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/"></ion-back-button>  
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title style="width: 100%; position: absolute; left: 0; color: var(--ion-color-primary);">
-      Walkies - Find walkers
-  </ion-title>
+    <ion-title>Walkies</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -28,12 +26,12 @@
     <ion-avatar slot="start">
      
     </ion-avatar>
-    <ion-label>Searching for walkers</ion-label>
+    <ion-label>Searching for walks</ion-label>
   </ion-item>
 
   <!--Walkers found-->
   <ion-item no-lines>
-    <ion-label >Walkers found :</ion-label>
+    <ion-label >Ownes who need walks :</ion-label>
   </ion-item>
   
   
@@ -58,6 +56,9 @@
               </ion-col>
               <ion-col>
                 € {{request.price}}
+              </ion-col>
+              <ion-col>
+                 {{request.durationMins}} Minutes
               </ion-col>
              
              

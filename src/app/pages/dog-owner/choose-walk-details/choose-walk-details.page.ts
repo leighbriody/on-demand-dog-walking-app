@@ -93,7 +93,7 @@ export class ChooseWalkDetailsPage implements OnInit {
     this.dataService.getOwner().subscribe((data: DogOwner) => {
       this.dogOnwer = {
         firstName:data.firstName,
-        lastName:data.lastName,
+        lastname:data.lastname,
         email:data.email,
         city:data.city,
         county:data.county,
@@ -110,7 +110,7 @@ export class ChooseWalkDetailsPage implements OnInit {
     navigator.geolocation.getCurrentPosition((position) => { 
         this.lat =  position.coords.latitude;
         this.lng = position.coords.longitude;
-        this.dataService.sendWalkersRequest( this.dogsIdSelectedForWalk  , this.lat , this.lng , this.dogOnwer ,  this.numberPetsSelected , this.walkPrice , this.note);
+        this.dataService.sendWalkersRequest( this.dogsIdSelectedForWalk  , this.lat , this.lng , this.dogOnwer ,  this.numberPetsSelected , this.selectedValue , this.walkPrice , this.note);
     }) 
 
   

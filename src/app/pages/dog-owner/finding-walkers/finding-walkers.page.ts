@@ -11,6 +11,8 @@ import { GoogleMapService } from 'src/app/services/google-map.service';
   styleUrls: ['./finding-walkers.page.scss'],
 })
 export class FindingWalkersPage implements OnInit {
+  numberDogs: number;
+  price: number;
 
   constructor(private dataService: DataService, private activatedRouter: ActivatedRoute, private googleMapService: GoogleMapService) { }
 
@@ -100,22 +102,19 @@ export class FindingWalkersPage implements OnInit {
   }
 
 
-  acceptWalkersRequest(walkRequestId: string, ownerEmail: string, walkerEmail: string, walkerLat: number, walkerLng: number) {
+  acceptWalkersRequest(walkRequestId: string, ownerEmail: string, walkerEmail: string, walkerLat: number, walkerLng: number , price:number , numberPets:number , durationMins:number) {
 
     let owner = <DogOwner>{};
     let walker = <DogWalker>{};
 
-    console.log("owner email", ownerEmail);
-    console.log("walker email", walkerEmail);
-
-    //get owner object
-
-    //also want to add walkers lat and long
+    let walkerName;
+    let walkPrice;
+  
 
     this.dataService.getOwnerByEmail(ownerEmail).subscribe(res => {
       console.log("created owner res ", res);
       owner.firstName = res.firstName,
-        owner.lastName = res.lastName,
+        owner.lastname = res.lastname,
         owner.city = res.city,
         owner.street = res.street,
         owner.eircode = res.eircode,
@@ -135,10 +134,13 @@ export class FindingWalkersPage implements OnInit {
         walker.username = res.username,
         walker.availableCounty = res.availableCounty;
 
-
-
     })
 
+    //get price and number pets and add to rapid walk 
+    this.dataService.getWalkRequestById(walkRequestId).subscribe( res => {
+      this.numberDogs = res.numberPets;
+      this.price = res.price;
+    })
     //get current logged in owner lat and long and add to request 
     navigator.geolocation.getCurrentPosition((position) => { //use geo location getting the current co ordinates and passing into current location
 
@@ -149,7 +151,9 @@ export class FindingWalkersPage implements OnInit {
       console.log("owner ", ownerLat, " ", ownerLng);
       console.log("walker", walkerLat, walkerLng)
 
-      this.dataService.createRapidWalk(walkRequestId, ownerEmail, walkerEmail, "walk details need to go in", walkerLat, walkerLng, ownerLat, ownerLng);
+
+      console.log("about to make rapid walk with mins" , durationMins);
+      this.dataService.createRapidWalk(walkRequestId, ownerEmail, walkerEmail, price , numberPets , "walk details need to go in", walkerLat, walkerLng, ownerLat, ownerLng , durationMins);
     })
 
 
