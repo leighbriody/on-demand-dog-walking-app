@@ -109,6 +109,10 @@ const routes: Routes = [
     path: 'my-walks-owner',
     loadChildren: () => import('./pages/dog-owner/my-walks-owner/my-walks-owner.module').then( m => m.MyWalksOwnerPageModule)
   },
+  {
+    path: 'my-profile-owner',
+    loadChildren: () => import('./pages/dog-owner/my-profile-owner/my-profile-owner.module').then( m => m.MyProfileOwnerPageModule)
+  },
  
 ];
 

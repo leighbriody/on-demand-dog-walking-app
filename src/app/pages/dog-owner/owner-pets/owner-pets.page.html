@@ -1,9 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-
       <ion-back-button defaultHref="/"></ion-back-button>
-
     </ion-buttons>
     <ion-title style="width: 100%; position: absolute; left: 0; color: var(--ion-color-primary);">
       Walkies
@@ -12,43 +10,44 @@
 
 </ion-header>
 
+
+
 <ion-content>
-
-
-
   <!--LIST OF PETS-->
-<ion-grid>
-  <ion-row>
-    <ion-col   sizeLg="6" sizeMd="6" sizeXs="6" *ngFor="let pet of ownersPets" >
-      <ion-card >
-        <ion-img src="../../../../assets/img/owner-pets/muller.jpg"></ion-img>
-        <ion-card-header>
-          <ion-card-title>{{pet.name}} </ion-card-title>
-          <ion-card-subtitle>{{pet.breed}} </ion-card-subtitle>
-          <ion-card-subtitle>{{pet.age}} years , {{pet.height}}</ion-card-subtitle>
-          <ion-card-subtitle>Number of walks 5</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-          {{pet.description}}
-        </ion-card-content>
-        <ion-card-content>
-          <ion-row>
-            <ion-col>
-              <label class="view-btn">View</label>
-            </ion-col>
-            <ion-col>
-              <label class="edit-btn">Edit</label>
-            </ion-col>
-            <ion-col>
-              <label class="remove-btn">Remove</label>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
 
-      </ion-card>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+  <
+  <ion-grid>
+    <ion-row>
+      <ion-col sizeLg="6" sizeMd="6" sizeXs="6" *ngFor="let pet of ownersPets">
+        <ion-card>
+          <ion-img src="../../../../assets/img/owner-pets/muller.jpg"></ion-img>
+          <ion-card-header>
+            <ion-card-title>{{pet.name}} </ion-card-title>
+            <ion-card-subtitle>{{pet.breed}} </ion-card-subtitle>
+            <ion-card-subtitle>{{pet.age}} years , {{pet.height}}</ion-card-subtitle>
+            <ion-card-subtitle>Number of walks 5</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            {{pet.description}}
+          </ion-card-content>
+          <ion-card-content>
+            <ion-row>
+              <ion-col>
+                <label class="view-btn">View</label>
+              </ion-col>
+              <ion-col>
+                <label class="edit-btn">Edit</label>
+              </ion-col>
+              <ion-col>
+                <label class="remove-btn">Remove</label>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 
   <!--<ion-grid>
