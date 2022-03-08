@@ -1,3 +1,6 @@
+import { rapidwalk } from './../../../services/data.service';
+import { getAuth } from 'firebase/auth';
+import { DataService } from 'src/app/services/data.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyWalksWalkerPage implements OnInit {
 
-  constructor() { }
+  //fields 
+  
+  allWalkersWalks: rapidwalk[];
+
+
+  constructor(private dataService : DataService) { }
 
   ngOnInit() {
+
+    let email = getAuth().currentUser.email;
+    
+    //let email = getAuth().currentUser.email;
+    this.dataService.getAllWalkersWalks(email).subscribe(res => {
+      this.allWalkersWalks = res;
+    })
   }
 
 }

@@ -10,7 +10,7 @@
 <ion-content>
 
   <!--Here we will display the map-->
-    <google-map #mapel height="50%" width="100%" [zoom]="zoom" [center]="center">
+    <google-map #mapel height="90%" width="100%" [zoom]="zoom" [center]="center">
     <map-marker *ngFor="let marker of markers" [position]="marker.position" [label]="marker.label"
       [title]="marker.title" [options]="marker.options">
     </map-marker>

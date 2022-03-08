@@ -1,7 +1,7 @@
 
 import { element } from 'protractor';
 import { DataService, DogWalker } from 'src/app/services/data.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Request } from 'src/app/services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GoogleMapService } from 'src/app/services/google-map.service';
@@ -45,7 +45,7 @@ export class FindWalksPage implements OnInit {
   length:number;
   
   constructor(private dataservice : DataService ,  private router: Router , private googleMapService : GoogleMapService)  { }
-
+@ViewChild('mapel') googlemaps: google.maps.Map;
   ngOnInit() {
        //get the logged in walker users county which they are available to walk
        this.dataservice.getDogWalkerUser().subscribe((data: DogWalker) => {   

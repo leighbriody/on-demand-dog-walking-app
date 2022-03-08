@@ -42,7 +42,7 @@
 </ion-row>
 <ion-row>
   <ion-col>
-    <ion-select value="30" [(ngModel)]="selectedValue" okText="Okay" cancelText="Dismiss" (ngModelChange)='timeChanged($event)' >
+    <ion-select value="30" [(ngModel)]="selectedValue" okText="Okay" cancelText="Dismiss" (ngModelChange)='timeChanged()' >
       <ion-select-option value="30">30 minutes</ion-select-option>
       <ion-select-option value="60">1 hour 0 minutes</ion-select-option>
       <ion-select-option value="90">1 hour 30 minutes</ion-select-option>

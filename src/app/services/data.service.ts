@@ -90,25 +90,47 @@ export interface geopoint {
   lat: number,
   lng: number
 }
-export interface rapidwalk {
-  walkRequestId: string;
+export interface rapidwalk1 {
+  durationMins: string
+  liveWalkCords: geopoint[];
+  numberPets: number;
   ownerEmail: string;
   ownerLat: number;
   ownerLng: number;
+  price: number;
   timeCreated: number;
   walkDistance: number;
   walkDuration: number;
+  walkRequestId: string;
   walkStatus: string;
   walkerEmail: string;
   walkerLat: number;
   walkerLng: number;
+  //requestedDurationMins: number;
+}
+
+export interface LiveWalkCord {
+  lat: number;
+  lng: number;
+}
+
+export interface rapidwalk {
+  walkDistance: number;
+  timeCreated: number;
+  durationMins: string;
+  walkStatus: string;
+  ownerEmail: string;
+  walkRequestId: string;
+  walkDuration: number;
+  walkerLng: number;
+  liveWalkCords: LiveWalkCord[];
+  ownerLng: number;
+  ownerLat: number;
   price: number;
   numberPets: number;
-  requestedDurationMins: number;
-  durationMins: number
-
-  //location array of objects
-  liveWalkCords: geopoint[];
+  walkerLat: number;
+  walkerEmail: string;
+  id: string;
 }
 
 export interface ownerReview {
@@ -351,56 +373,70 @@ export class DataService {
     })
   }
 
-  async endRapidWalk(rapidwalkId:string){
+  async endRapidWalk(rapidwalkId: string) {
     //need to get the rapid walk and update the status field to finished
     const docRef = doc(this.firestore, "rapidwalks/" + rapidwalkId);
     await updateDoc(docRef, {
-      walkStatus:"finished"
+      walkStatus: "finished"
 
     })
 
   }
-  postReviewOnWalker(ownerEmail:string , walkerEmail:string , rating:number , reviewText: string){
+  postReviewOnWalker(ownerEmail: string, walkerEmail: string, rating: number, reviewText: string) {
     console.log("posting review on walker ", walkerEmail, " for rating of ", rating, "with text ", reviewText);
-     //add dog and store its id in a field
-      const ownerReviewsRef = collection(this.firestore, 'dogwalkers/',walkerEmail, '/reviews');
-      return addDoc(ownerReviewsRef, { ownerEmail:walkerEmail}).then(res => {
-        const docId = res.id
-  
-        let docRef = doc(this.firestore, "dogowners", walkerEmail, "/reviews/" + docId)
-  
-        setDoc(docRef, {
-          id: docId,
-          walkerEmail:walkerEmail,
-          reviewLeftBy: ownerEmail,
-          rating: rating,
-          reviewText: reviewText,
-      
-        })
+    //add dog and store its id in a field
+    const ownerReviewsRef = collection(this.firestore, 'dogwalkers/', walkerEmail, '/reviews');
+    return addDoc(ownerReviewsRef, { ownerEmail: walkerEmail }).then(res => {
+      const docId = res.id
+
+      let docRef = doc(this.firestore, "dogowners", walkerEmail, "/reviews/" + docId)
+
+      setDoc(docRef, {
+        id: docId,
+        walkerEmail: walkerEmail,
+        reviewLeftBy: ownerEmail,
+        rating: rating,
+        reviewText: reviewText,
+
       })
+    })
   }
 
-  postReviewOnOwner(walkerEmail:String , ownerEmail: string, rating: number, reviewText: string) {
+  postReviewOnOwner(walkerEmail: String, ownerEmail: string, rating: number, reviewText: string) {
 
     console.log("posting review on owner ", ownerEmail, " for rating of ", rating, "with text ", reviewText);
 
-      //add dog and store its id in a field
-      const ownerReviewsRef = collection(this.firestore, 'dogowners/',ownerEmail, '/reviews');
-      return addDoc(ownerReviewsRef, { ownerEmail:ownerEmail}).then(res => {
-        const docId = res.id
-  
-        let docRef = doc(this.firestore, "dogowners", ownerEmail, "/reviews/" + docId)
-  
-        setDoc(docRef, {
-          id: docId,
-          ownerEmail:ownerEmail,
-          reviewLeftBy: walkerEmail,
-          rating: rating,
-          reviewText: reviewText,
-      
-        })
-      })
+    //add dog and store its id in a field
+    const ownerReviewsRef = collection(this.firestore, 'dogowners/', ownerEmail, '/reviews');
+    return addDoc(ownerReviewsRef, { ownerEmail: ownerEmail }).then(res => {
+      const docId = res.id
 
+      let docRef = doc(this.firestore, "dogowners", ownerEmail, "/reviews/" + docId)
+
+      setDoc(docRef, {
+        id: docId,
+        ownerEmail: ownerEmail,
+        reviewLeftBy: walkerEmail,
+        rating: rating,
+        reviewText: reviewText,
+
+      })
+    })
+
+  }
+
+  getAllWalkersWalks(walkerEmail: string): Observable<rapidwalk[]> {
+    const requestref = collection(this.firestore, 'rapidwalks/');
+    const q = query(requestref, where("walkerEmail", "==", walkerEmail));
+    return collectionData(q, { idField: 'id' }) as Observable<rapidwalk[]>;
+
+
+  }
+
+  getAllRapidWalks() {
+    console.log("get all rapid walks called")
+    const ownersPetsRef = collection(this.firestore, 'rapidwalks/');
+    return collectionData(ownersPetsRef, { idField: 'id' }) as Observable<rapidwalk[]>;
   }
 
 }
