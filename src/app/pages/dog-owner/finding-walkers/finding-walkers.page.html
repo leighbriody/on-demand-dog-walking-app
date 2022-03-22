@@ -17,8 +17,6 @@
     </map-marker>
     <map-polyline>
     </map-polyline>
-
- 
   </google-map>
 
   <!--Currently offline click button to start searching-->
@@ -55,11 +53,10 @@
                 {{walker.durationMins}} Mins
               </ion-col>
             </ion-row>
-
             <ion-button
               (click)="acceptWalkersRequest(walker.walkRequestId , walker.ownerEmail ,walker.walkerEmail , walker.lat , walker.lng , walker.price ,walker.numberPets, walker.durationMins)">
               Accept</ion-button>
-            <ion-button>Decline </ion-button>
+            <!--<ion-button>Decline </ion-button>-->
             <ion-button (click)="viewOnMap(walker)">View On Map </ion-button>
           </ion-label>
         </ion-item>

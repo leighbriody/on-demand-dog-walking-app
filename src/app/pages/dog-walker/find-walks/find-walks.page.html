@@ -1,6 +1,6 @@
 <!--Header-->
 <ion-header>
-  <ion-toolbar  color="primary"> 
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
@@ -10,7 +10,7 @@
 <ion-content>
 
   <!--Here we will display the map-->
-    <google-map #mapel height="90%" width="100%" [zoom]="zoom" [center]="center">
+  <google-map #mapel height="60%" width="100%" [zoom]="zoom" [center]="center">
     <map-marker *ngFor="let marker of markers" [position]="marker.position" [label]="marker.label"
       [title]="marker.title" [options]="marker.options">
     </map-marker>
@@ -22,26 +22,21 @@
   <!--Currently offline click button to start searching-->
 
   <!--Searching for walkers-->
-  <ion-item>
-    <ion-avatar slot="start">
-     
-    </ion-avatar>
-    <ion-label>Searching for walks</ion-label>
-  </ion-item>
+ 
 
   <!--Walkers found-->
   <ion-item no-lines>
-    <ion-label >Ownes who need walks :</ion-label>
+    <ion-label>Owners Who Need walking in county:</ion-label>
   </ion-item>
-  
-  
 
 
-<!--This section will be all walkers -->
-  <ion-slides pager="true" [options]="slideOpts" >
-    <ion-slide *ngFor="let request of requests">
+
+
+  <!--This section will be all walkers -->
+  <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide *ngFor="let request of requests;index as i">
       <ion-card>
-        <ion-item  lines="none">
+        <ion-item lines="none">
           <ion-avatar slot="start">
             <img src="../../../../assets/img/find-walks/user1.jpg">
           </ion-avatar>
@@ -49,24 +44,50 @@
             <h3>{{request.name}}</h3>
             <h3>Email : {{request.email}}</h3>
             <h4>{{request.county}}</h4>
-            <p><ion-icon name="star-outline"></ion-icon><ion-icon name="star-outline"></ion-icon><ion-icon name="star-outline"></ion-icon><ion-icon name="star-outline"></ion-icon><ion-icon name="star-outline"></ion-icon></p>
+            <p>
+              <ion-icon name="star-outline"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+            </p>
             <ion-row>
               <ion-col>
                 {{request.numberPets}} dogs <ion-icon name="paw"></ion-icon>
               </ion-col>
-              <ion-col>
-                € {{request.price}}
-              </ion-col>
-              <ion-col>
-                 {{request.durationMins}} Minutes
-              </ion-col>
-             
-             
+
             </ion-row>
-            <ion-button (click)="acceptRequest(request)">Accept</ion-button>
+            <ion-row>
+              <ion-col *ngFor="let dog of request.dogs">
+                <ion-chip>
+                  <ion-avatar>
+                    <img src="../../../../assets/img/find-walks/dog-icon.png">
+                  </ion-avatar>
+                  <ion-label>{{dog.name}} </ion-label>
+                </ion-chip>
+
+              </ion-col>
+              <ion-row>
+
+
+                <ion-col>
+                  € {{request.price}}
+                </ion-col>
+                <ion-col>
+                  {{request.durationMins}} Minutes
+                 
+                </ion-col>
+              </ion-row>
+
+
+            </ion-row>
+          
+            <ion-button *ngIf="acceptBtns[i] != 'Waiting'  && request.rapidWalkId == null"  (click)="acceptRequest(request , i)">Accept</ion-button>
+            <ion-button *ngIf="acceptBtns[i] === 'Waiting' && request.rapidWalkId == null" >Waiting .. </ion-button>
             <!--If the walk is accept , or there is a rapid id field on it we need to display start walking-->
-            <ion-button *ngIf="request.rapidWalkId != null" (click)="joinRapidWalk(request.rapidWalkId)">Join Walk </ion-button>
-            <ion-button>Decline</ion-button>
+            <ion-button *ngIf="request.rapidWalkId != null" (click)="joinRapidWalk(request.rapidWalkId)">Join Walk
+            </ion-button>
+           <!-- <ion-button (click)="declineRequest(request)">Decline</ion-button> -->
             <ion-button (click)="viewOwnerOnMap(request)">View On Map</ion-button>
           </ion-label>
         </ion-item>

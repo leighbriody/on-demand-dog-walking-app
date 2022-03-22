@@ -1,5 +1,5 @@
 import { getAuth } from '@angular/fire/auth';
-import { DataService, rapidwalk } from 'src/app/services/data.service';
+import { DataService, Message, rapidwalk } from 'src/app/services/data.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GoogleMapService } from 'src/app/services/google-map.service';
@@ -21,7 +21,7 @@ export class RapidWalkWalkerPage implements OnInit {
 
   //map
   rapidWalkId: string;
-  zoom = 12;
+  zoom = 14;
   center: google.maps.LatLngLiteral
 
   //markers array for owner and walker to show current location
@@ -71,14 +71,33 @@ export class RapidWalkWalkerPage implements OnInit {
   walkMinutes
   walkHrs
 
+
+  walkerEmail 
   //review info
   reviewText
   rating
 
+  //chat box
+  messages: Message[] = [];
+  messageText = ""
+
   //on page iinit 
   ngOnInit() {
+
+    
+    this.walkerEmail = getAuth().currentUser.email;
+
     //get the rapid walk id
     this.rapidWalkId = this.activatedRouter.snapshot.paramMap.get("id");
+
+    //store user email 
+
+    //messages 
+    // we want to get messages for the rapid walk and subscribe
+    this.dataservice.getRapidWalkMessages(this.rapidWalkId).subscribe( res => {
+      console.log("messages for rapid walk " , this.rapidWalkId , "res " , res);
+      this.messages = res;
+    })
 
     //get the rapid walk
     this.dataservice.getRapidWalkById(this.rapidWalkId).subscribe((data: rapidwalk) => {
@@ -377,6 +396,15 @@ export class RapidWalkWalkerPage implements OnInit {
   
   }
 
+
+  sendMessage(){
+    //the walker would like to send a message
+    
+    //from , text , time
+    const d: Date = new Date();
+    console.log("sendiung test " , this.messageText);
+    this.dataservice.sendMessage(this.rapidWalkId ,this.walkerEmail , this.messageText , d);
+  }
 
   postReview(){
     //when a walker wishes to post a review on the owner

@@ -1,0 +1,43 @@
+
+  .user_name {
+    color: #afafaf;
+  }
+  .message {
+    padding: 10px !important;
+    transition: all 250ms ease-in-out !important;
+    border-radius: 10px !important;
+    margin-bottom: 4px !important;
+  }
+  .mymessage {
+    background: blue !important;
+    color: #000 !important;
+    border-top-right-radius: 0px !important;
+  }
+  .othermessage {
+    background: #dcdcdc !important;
+    color: #000 !important;
+    border-top-left-radius: 0px !important;
+  }
+  .time {
+    color: #afafaf;
+    float: right;
+    font-size: small;
+  }
+  .message_row {
+    background-color: #fff;
+  }
+
+  .innermsg.left {
+	float: left;
+	background-color: #F1F0F0;
+	color: black;
+	clear: both;
+}
+
+.innermsg.right {
+	float: right;
+	//margin-right: 10%;
+	background-color: #0084FF;
+	color: white;
+	clear: both;
+}

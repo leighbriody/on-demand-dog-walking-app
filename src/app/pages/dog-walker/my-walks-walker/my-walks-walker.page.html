@@ -23,21 +23,23 @@
         </ion-col>
         <ion-col size="8">
             <ion-row>
-              Date Walked {{walk.timeCreated}}
+             {{format_time(walk.timeCreated)}}
             </ion-row>
             <ion-row>
-              <ion-col>
-                {{walk.walkDistance}}m
+              <ion-col class="stat-col">
+                {{metersToKm(walk.walkDistance)}}Km
               </ion-col>
-              <ion-col>
-                {{walk.walkDuration}}
-              </ion-col>
-              <ion-col>
+              
+              <ion-col class="stat-col">
                 € {{walk.price}}
               </ion-col>
-              <ion-col>
+              <ion-col class="stat-col">
                 {{walk.numberPets}} <ion-icon name="paw"></ion-icon>
               </ion-col>
+            </ion-row>
+            <ion-row>
+
+              {{secondsToTime(walk.walkDuration)}} 
             </ion-row>
             <ion-row>
               Dog Owner :
@@ -64,6 +66,7 @@
 </ion-content>
 
 <!--DOG OWNER TABS-->
+<ion-footer>
 <ion-tabs>  
   <ion-fab vertical="bottom" horizontal="center" translucent="true"  [routerLink]="['/','find-walks']">
     <ion-fab-button >
@@ -71,7 +74,7 @@
     </ion-fab-button>
   </ion-fab> 
   <ion-tab-bar slot="bottom" class="ion-no-border">
-    <ion-tab-button tab="tab-encounters" class="home">
+    <ion-tab-button tab="tab-encounters">
       <ion-icon name="home" ></ion-icon>
     </ion-tab-button>
     <ion-tab-button tab="tab-conversations" class="comments" [routerLink]="['/','owner-pets']">
@@ -79,7 +82,7 @@
       <ion-badge></ion-badge>
     </ion-tab-button>
     <svg height="50" viewBox="0 0 100 50" width="100" xmlns="http://www.w3.org/2000/svg"><path d="M100 0v50H0V0c.543 27.153 22.72 49 50 49S99.457 27.153 99.99 0h.01z" fill="red" fill-rule="evenodd"></path></svg>
-    <ion-tab-button tab="tab-notifications" class="notifs" [routerLink]="['/','my-walks-walker']">
+    <ion-tab-button tab="tab-notifications" class="active" [routerLink]="['/','my-walks-walker']">
       <ion-icon name="walk"></ion-icon>
       <ion-badge>1</ion-badge>
     </ion-tab-button>
@@ -89,3 +92,4 @@
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>
+</ion-footer>

@@ -31,13 +31,13 @@
       <ion-item class="floating-input">
         <ion-label position="floating">Password</ion-label>
        <!-- <ion-input    [(ngModel)]="password">-->
-        <ion-input [(ngModel)]="password" #passwordInput class="ion-padding-right" clearOnEdit="false" >
+        <ion-input [(ngModel)]="password" #passwordInput class="ion-padding-right"  [type]="show ? 'text' : 'password'" clearOnEdit="false" >
         </ion-input>
         <!-- SHOW PASSWORD BUTTON -->
         <ion-button slot="end"  shape="round" color="dark" fill="clear">
           <ion-icon slot="icon-only" ></ion-icon>
         </ion-button>
-        
+        <ion-icon name="eye" slot="end" (click)="showPassword()" color="primary"></ion-icon>
       </ion-item>
       <!-- SUBMIT BUTTON -->
       <ion-button  (click)="SignIn()" class="custom-button" expand="block">

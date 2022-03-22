@@ -11,14 +11,17 @@ import { GoogleMapService } from 'src/app/services/google-map.service';
   styleUrls: ['./finding-walkers.page.scss'],
 })
 export class FindingWalkersPage implements OnInit {
+
+  //data fields
   numberDogs: number;
   price: number;
 
   constructor(private dataService: DataService, private activatedRouter: ActivatedRoute, private googleMapService: GoogleMapService) { }
 
+  //data fields
   walkRequestId: string;
   markers = []
-  zoom = 12;
+  zoom = 14;
   center: google.maps.LatLngLiteral
   options: google.maps.MapOptions = {
     zoomControl: false,
@@ -29,6 +32,7 @@ export class FindingWalkersPage implements OnInit {
     minZoom: 8,
   }
 
+  //map
   map: google.maps.Map;
   newLat: any;
   newLong: any;
@@ -39,6 +43,7 @@ export class FindingWalkersPage implements OnInit {
     speed: 400
   };
 
+  //all walkers who accepted the request
   walkersWhoAcceptedRequest: walkersWhoAccepted[];
 
   ngOnInit() {
@@ -48,46 +53,35 @@ export class FindingWalkersPage implements OnInit {
     //now that we have that walk request id we need to listen for the walkers who accepted our offer
     //walk requests / id of request just created / walkers who accepted requests
     this.dataService.getWalkersWhoAcceptedRequest(this.walkRequestId).subscribe(res => {
-      console.log("walkers who accepted ", res);
-      console.log("walkers who accepted array", this.walkersWhoAcceptedRequest);
       this.walkersWhoAcceptedRequest = res;
     })
 
-    //on init we need to centre the user
-    //google maps logic
-
-    //we need to get the current users pposition and display as centre 
-    //get the markers array
+    //get markers
     const markers = this.googleMapService.markers.getValue();
 
-
+    //get geolocation and add marker
     navigator.geolocation.getCurrentPosition((position) => { //use geo location getting the current co ordinates and passing into current location
       this.center = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       }
-
       this.googleMapService.currentLocation.next(this.center);
       this.addMarker(position.coords.latitude, position.coords.longitude);
     })
 
   }
-
-  //we will have an array of accepted requests
-
-  //we want to get all accepted requests which are from todays date , and have a status of waiting response
-
+  
+  //view walkers on map
   viewOnMap(walker: walkersWhoAccepted) {
     this.center = {
       lat: walker.lat,
       lng: walker.lng,
     }
-
     this.addMarker(walker.lat, walker.lng);
     this.googleMapService.currentLocation.next(this.center);
   }
 
-
+//add a marker to the map
   addMarker(lat, lng): void {                     // pushing the marker we got from current location into array of markers
     this.markers.push({
       location: 'home',
@@ -100,19 +94,16 @@ export class FindingWalkersPage implements OnInit {
     this.newLat = "";
     this.newLong = "";
   }
-
-
+  //accept the requests
   acceptWalkersRequest(walkRequestId: string, ownerEmail: string, walkerEmail: string, walkerLat: number, walkerLng: number , price:number , numberPets:number , durationMins:number) {
-
     let owner = <DogOwner>{};
     let walker = <DogWalker>{};
 
     let walkerName;
     let walkPrice;
-  
-
+    
+    //get the current loggeed in owner
     this.dataService.getOwnerByEmail(ownerEmail).subscribe(res => {
-      console.log("created owner res ", res);
       owner.firstName = res.firstName,
         owner.lastname = res.lastname,
         owner.city = res.city,
@@ -122,7 +113,7 @@ export class FindingWalkersPage implements OnInit {
     })
 
     //get walker object
-    console.log("walker email ", walkerEmail);
+
     this.dataService.getWalkerByEmail(walkerEmail).subscribe(res => {
       console.log("created owner res ", res);
       walker.firstName = res.firstName,
@@ -143,26 +134,12 @@ export class FindingWalkersPage implements OnInit {
     })
     //get current logged in owner lat and long and add to request 
     navigator.geolocation.getCurrentPosition((position) => { //use geo location getting the current co ordinates and passing into current location
-
       let ownerLat = position.coords.latitude;
       let ownerLng = position.coords.longitude;
 
-      console.log("rapid walk created lat details below")
-      console.log("owner ", ownerLat, " ", ownerLng);
-      console.log("walker", walkerLat, walkerLng)
-
-
-      console.log("about to make rapid walk with mins" , durationMins);
+      //create the rapid walk
       this.dataService.createRapidWalk(walkRequestId, ownerEmail, walkerEmail, price , numberPets , "walk details need to go in", walkerLat, walkerLng, ownerLat, ownerLng , durationMins);
     })
-
-
-
-
-
-
-
-    //we then need to add the rapid walk id on to the walk request
 
   }
 }

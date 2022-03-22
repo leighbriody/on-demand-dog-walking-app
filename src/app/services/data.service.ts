@@ -55,7 +55,8 @@ export interface Dog {
 export interface Request {
   id: string;
   email: string;
-  dogs: string[];
+ // dogs: string[];
+   dogs:Dog[]
   county: string;
   name: string;
   numberPets: number;
@@ -65,6 +66,14 @@ export interface Request {
   rapidWalkId: string;
   lat: number;
   lng: number;
+}
+
+export interface Message {
+  
+  from:string;
+  text:string;
+  time:number;
+
 }
 
 
@@ -147,6 +156,12 @@ export interface walkerReview {
   ownerEmail: string;
   rating: number;
   reviewText: string;
+}
+
+export interface pet {
+  petId:string;
+  petName:String;
+  petImg:string
 }
 
 @Injectable({
@@ -242,19 +257,20 @@ export class DataService {
     return docData(docRef, { idField: 'id' }) as Observable<DogWalker>;
   }
 
-  sendWalkersRequest(dogsPickedId: string[], lat: string, lng: string, dogOwner: DogOwner, numberPets: number, durationMins: number, price: number, note: string) {
+  sendWalkersRequest(dogsPickedId:Dog[], lat: string, lng: string, firstName:string , county:string , email:string ,  numberPets: number, durationMins: number, price: number, note: string) {
 
+   console.log("Dog owner object data side first name : " , firstName );
 
     const requestRef = collection(this.firestore, 'walkrequests/');
-    return addDoc(requestRef, { id: requestRef.id, name: dogOwner.firstName, county: dogOwner.county, numPets: 2, durationMins: durationMins, price: price, lat: lat, lng: lng, dogs: dogsPickedId, note: note }).then(res => {
+    return addDoc(requestRef, { id: requestRef.id, name: firstName , county: county, numPets: 2, durationMins: durationMins, price: price, lat: lat, lng: lng, dogs: dogsPickedId, note: note }).then(res => {
       const docId = res.id
       let docRef = doc(this.firestore, "walkrequests" + "/" + docId)
 
       setDoc(docRef, {
         id: docId,
-        name: dogOwner.firstName,
-        county: dogOwner.county,
-        email: dogOwner.email,
+        name: firstName,
+        county: county,
+        email: email,
         numberPets: numberPets,
         durationMins: durationMins,
         price: price,
@@ -296,6 +312,7 @@ export class DataService {
 
 
     const timestamp = Date.now();
+
     let timeCreated = "change this current date time"
     //we need targetWalkDuration currentWalkDuration , currentDistance
     return addDoc(rapidWalkRef, { walkRequestId: requestId, walkerEmail: walkerEmail, ownerEmail: ownerEmail, price: price, numberPets: numberPets, timeCreated: timestamp, walkDistance: 0, walkDuration: 0, walkStatus: "awaitingStart", walkerLat: walkerLat, walkerLng: walkerLng, ownerLat: ownerLat, ownerLng: ownerLng, durationMins: durationMins }).then(async res => {
@@ -429,14 +446,48 @@ export class DataService {
     const requestref = collection(this.firestore, 'rapidwalks/');
     const q = query(requestref, where("walkerEmail", "==", walkerEmail));
     return collectionData(q, { idField: 'id' }) as Observable<rapidwalk[]>;
+  }
 
-
+  getAllOwnersWalks(ownerEmail: string): Observable<rapidwalk[]> {
+    const requestref = collection(this.firestore, 'rapidwalks/');
+    const q = query(requestref, where("ownerEmail", "==", ownerEmail));
+    return collectionData(q, { idField: 'id' }) as Observable<rapidwalk[]>;
   }
 
   getAllRapidWalks() {
     console.log("get all rapid walks called")
     const ownersPetsRef = collection(this.firestore, 'rapidwalks/');
     return collectionData(ownersPetsRef, { idField: 'id' }) as Observable<rapidwalk[]>;
+  }
+
+  async sendMessage(rapidwalkId:string , from:string , text:string  , date:Date){
+
+    
+    //add dog and store its id in a field
+    const messagesRef = collection(this.firestore, 'rapidwalks/', rapidwalkId , '/messages');
+    return addDoc(messagesRef, {from:from , text:text , time:date.getTime()}).then(res => {
+      const docId = res.id
+
+      let docRef = doc(this.firestore, "rapidwalks/", rapidwalkId, "/messages/" + docId)
+      setDoc(docRef, {
+        id: docId,
+        from: from,
+        text: text,
+        time: date.getTime(),
+    
+      })
+    })
+    
+
+
+    
+  
+  }
+  getRapidWalkMessages(rapidWalkId:string){
+
+     //need to get the rapid walk and update the status field to finished
+     const docRef = collection(this.firestore, "rapidwalks/" + rapidWalkId + '/messages' );
+     return collectionData(docRef, { idField: 'id' }) as Observable<Message[]>;
   }
 
 }

@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { MyProfileOwnerPageRoutingModule } from './my-profile-owner-routing.module';
 
 import { MyProfileOwnerPage } from './my-profile-owner.page';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MyProfileOwnerPageRoutingModule
+    MyProfileOwnerPageRoutingModule,
+    GoogleMapsModule
   ],
   declarations: [MyProfileOwnerPage]
 })

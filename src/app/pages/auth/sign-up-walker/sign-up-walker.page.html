@@ -62,14 +62,15 @@
       <!--Password-->
       <ion-item class="floating-input">
         <ion-label position="floating">Password</ion-label>
-        <ion-input #passwordInput clearOnEdit="false" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password"></ion-input>
+        <ion-input #passwordInput clearOnEdit="false" [type]="show ? 'text' : 'password'"[(ngModel)]="password"></ion-input>
         <ion-button slot="end"  shape="round" color="dark" fill="clear">    
         </ion-button>
+        <ion-icon name="eye" slot="end" (click)="showUserPassword()" color="primary"></ion-icon>
       </ion-item>
       <!--Confirm password-->
       <ion-item class="floating-input">
         <ion-label position="floating">Password</ion-label>
-        <ion-input clearOnEdit="false" type="password"></ion-input>
+        <ion-input clearOnEdit="false" type="password" [type]="show ? 'text' : 'password'"></ion-input>
       </ion-item>
       <ion-button  class="custom-button" expand="block" (click)="SignUp()">
         Sign up

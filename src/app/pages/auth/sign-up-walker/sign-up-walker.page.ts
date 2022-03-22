@@ -23,10 +23,20 @@ export class SignUpWalkerPage implements OnInit {
    addressLine:string;
    county:string;
 
+     // variable - default false for password
+show: boolean = false;
+
   constructor(private auth : AuthService) { }
 
   ngOnInit() {
   }
+
+
+  
+  showUserPassword() {
+    this.show = !this.show;
+}
+
 
   SignUp(){
    

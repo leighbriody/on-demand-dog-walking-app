@@ -15,17 +15,23 @@ export class SignUpOwnerPage implements OnInit {
   //track user logged in status
   userLoggedIn:boolean;
 
+  // variable - default false for password
+show: boolean = false;
+
   //make injection as we need to access firebase auth
   constructor(private auth :AuthService) { }
 
   ngOnInit() {
   }
 
+  showPassword() {
+    this.show = !this.show;
+}
+
 
   signUp(){
     //call sign up as owner method and clear fields
-    this.auth.signUpAsOwner(this.email , this.password);
-     
+    this.auth.signUpAsOwner(this.email , this.password); 
     console.log("sign up as owner ts trigger" , this.email , this.password);
       this.email ="";
       this.password = "";

@@ -27,12 +27,15 @@
       <ion-item class="floating-input">
         <ion-label position="floating">Password</ion-label>
        <!-- <ion-input    [(ngModel)]="password">-->
-        <ion-input [(ngModel)]="password" #passwordInput class="ion-padding-right" clearOnEdit="false" >
+        <ion-input [(ngModel)]="password" #passwordInput [type]="show ? 'text' : 'password'" class="ion-padding-right" clearOnEdit="false" >
+         
         </ion-input>
+     
         <!-- SHOW PASSWORD BUTTON -->
         <ion-button slot="end"  shape="round" color="dark" fill="clear">
           <ion-icon slot="icon-only" ></ion-icon>
         </ion-button>       
+        <ion-icon name="eye" slot="end" (click)="showPassword()" color="primary"></ion-icon>
       </ion-item>
       <!-- SUBMIT BUTTON -->
       <ion-button  (click)="SignIn()" class="custom-button" expand="block">
@@ -40,6 +43,7 @@
       </ion-button>
     </div>
     <!-- INPUT CARD END -->
+  
     <div>  
       <div class="ion-text-center social-auth">
         <ion-icon name="logo-facebook"></ion-icon>
@@ -50,7 +54,7 @@
         <ion-button fill="clear" routerLink="/sign-up-owner" routerDirection="forward">
           Dont already have an account ? Sign Up
         </ion-button>
-        <ion-button [routerLink]="['/','owner-home']">owner home delete</ion-button>     
+       
       </div>
     </div>
   </div>

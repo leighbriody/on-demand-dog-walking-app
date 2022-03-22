@@ -26,8 +26,6 @@
     </map-marker>
     <map-polyline [options]="polylineOptions">
     </map-polyline>
-
-    
   </google-map>
 
 
@@ -37,9 +35,7 @@
   <!--*ngIf="walkInProgress"-->
   <ion-card *ngIf="walkInProgress && walkFinished == false" >
     <ion-grid>
- 
       <ion-row>
-
         <ion-col>
           <ion-button color="danger">Live</ion-button>
         </ion-col>
@@ -52,7 +48,6 @@
     </ion-row>
     <ion-row>
       <ion-col>
-       
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -61,7 +56,6 @@
   <!--If walk not in progress show this-->
   <ion-card *ngIf="walkInProgress == false && walkFinished == false" >
   <ion-item>The walker is on their way</ion-item>
-
     <ion-item lines="none">
       <ion-avatar slot="start">
         <img src="../../../../assets/img/find-walks/user1.jpg">
@@ -94,7 +88,6 @@
         </ion-button>
       </ion-label>
     </ion-item>
-
   </ion-card>
   
 
@@ -129,7 +122,6 @@
           Pet(s) walked:
         </ion-item>
       </ion-list>
-  
       <ion-item>
         <ion-row>
           <ion-col>
@@ -142,10 +134,8 @@
           <ion-col>
             {{numDogs}}
           </ion-col>
-  
         </ion-row>
       </ion-item>
-  
   
       <!--Walk Details-->
       <ion-list lines="none">
@@ -166,7 +156,6 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-  
       <ion-grid>
         <ion-row>
           <ion-col>
@@ -231,6 +220,31 @@
 
 
   <!--Chatbox-->
+   <!--Chatbox-->
+   <ion-card>
+    <ion-grid>
+      <ion-row *ngFor="let message of messages">
+        <ion-col col-9 *ngIf="message.from!==ownerEmail" class="message"  [ngClass]="{'mymessage': message.from === ownerEmail, 'othermessage': message.from !== ownerEmail}">
+          <span class="user_name">{{ message.from }}:</span>
+          <br>
+          <span>{{ message.text }}</span>
+          <div class="time">{{message.time }}</div>
+        </ion-col>
+  
+        <ion-col offset-3 col-9 *ngIf="message.from===ownerEmail" class="message" [ngClass]="{'mymessage': message.from === ownerEmail, 'othermessage': message.from !== ownerEmail}">
+          <span class="user_name">{{ message.from }}:</span>
+          <br>
+          <span>{{ message.text }}</span>
+          <div class="time">{{message.time }}</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-item>
+      <ion-label>Message:</ion-label>
+      <ion-textarea rows="6" cols="20" placeholder="Enter any message here..." [(ngModel)]="messageText"></ion-textarea>
+    </ion-item>
+    <ion-button (click)="sendMessage()">Send</ion-button>
+    </ion-card>
 
 
 </ion-content>

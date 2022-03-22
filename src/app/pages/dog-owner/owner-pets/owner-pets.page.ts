@@ -11,16 +11,14 @@ import { DataService, Dog } from 'src/app/services/data.service';
 export class OwnerPetsPage implements OnInit {
 
 
+  //data fields
   userLoggedIn: boolean = false;
   ownersPets: Dog[];
   constructor(private dataService: DataService, private auth: AuthService) {
-
-
-
   }
 
   ngOnInit() {
-
+    //on init get their pets
     this.dataService.getAllOwnersPets().subscribe(res => {
       console.log("All pets in data res", res);
       this.ownersPets = res;

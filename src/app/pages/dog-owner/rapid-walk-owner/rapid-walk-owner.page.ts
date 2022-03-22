@@ -1,5 +1,5 @@
 import { getAuth } from '@angular/fire/auth';
-import { DataService, rapidwalk, DogWalker } from 'src/app/services/data.service';
+import { DataService, rapidwalk, DogWalker, Message } from 'src/app/services/data.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GoogleMapService } from 'src/app/services/google-map.service';
@@ -14,11 +14,11 @@ import { takeWhile } from 'rxjs/operators';
 })
 export class RapidWalkOwnerPage implements OnInit {
 
-  constructor(private activatedRouter: ActivatedRoute, private dataService: DataService, private googleMapService: GoogleMapService , private router: Router) { }
+  constructor(private activatedRouter: ActivatedRoute, private dataService: DataService, private googleMapService: GoogleMapService, private router: Router) { }
   @ViewChild('mapel') googlemaps: google.maps.Map;
 
   //map variables
-  zoom = 12;
+  zoom = 14;
   center: google.maps.LatLngLiteral
   rapidWalkId: string;
   markersOwner = []
@@ -42,7 +42,7 @@ export class RapidWalkOwnerPage implements OnInit {
   walkerLat: number;
   walkerLng: number;
 
-  
+
   walkInProgress: boolean = false;
   walkFinished: boolean = false;
   markerCounter = 0;
@@ -65,12 +65,26 @@ export class RapidWalkOwnerPage implements OnInit {
   walkHrs
   reviewText
   rating
-  
+
+  //chat box 
+  ownerEmail
+  messages: Message[] = [];
+  messageText = "";
   //when the page first initializes
   ngOnInit() {
+
+    //set owner email
+    //this.ownerEmail = getAuth().currentUser.email;
+
     //get the rapid walk id
     this.rapidWalkId = this.activatedRouter.snapshot.paramMap.get("id");
 
+     //messages 
+    // we want to get messages for the rapid walk and subscribe
+    this.dataService.getRapidWalkMessages(this.rapidWalkId).subscribe( res => {
+      console.log("messages for rapid walk " , this.rapidWalkId , "res " , res);
+      this.messages = res;
+    })
 
     //subscrive to rapid walk 
     this.dataService.getRapidWalkById(this.rapidWalkId).subscribe((data: rapidwalk) => {
@@ -81,15 +95,13 @@ export class RapidWalkOwnerPage implements OnInit {
       this.price = data.price;
       this.numDogs = data.numberPets;
       this.expectedDuration = data.durationMins;
-
+      this.ownerEmail = data.ownerEmail;
 
       //checking if the walk is finished
-      if(data.walkStatus == "finished"){
-       
+      if (data.walkStatus == "finished") {
         this.walkFinished = true;
         this.walkEnded();
       }
-
 
       //get walker object by email 
       this.dataService.getWalkerByEmail(data.walkerEmail).subscribe((data: DogWalker) => {
@@ -225,8 +237,8 @@ export class RapidWalkOwnerPage implements OnInit {
   }
 
 
-  walkEnded(){
-    
+  walkEnded() {
+
     //convert our seconds to hrs m s 
     this.secondsToTime(this.seconds);
   }
@@ -242,27 +254,36 @@ export class RapidWalkOwnerPage implements OnInit {
       });
   }
 
-  secondsToTime(secs)
-  {
-      var hours = Math.floor(secs / (60 * 60));
-      var divisor_for_minutes = secs % (60 * 60);
-      var minutes = Math.floor(divisor_for_minutes / 60);
-      var divisor_for_seconds = divisor_for_minutes % 60;
-      var seconds = Math.ceil(divisor_for_seconds);
-      this.walkSeconds = seconds;
-      this.walkMinutes = minutes;
-      this.walkHrs = hours;
+  secondsToTime(secs) {
+    var hours = Math.floor(secs / (60 * 60));
+    var divisor_for_minutes = secs % (60 * 60);
+    var minutes = Math.floor(divisor_for_minutes / 60);
+    var divisor_for_seconds = divisor_for_minutes % 60;
+    var seconds = Math.ceil(divisor_for_seconds);
+    this.walkSeconds = seconds;
+    this.walkMinutes = minutes;
+    this.walkHrs = hours;
   }
 
-  postReview(){
- //when a walker wishes to post a review on the owner
+  postReview() {
+    //when a walker wishes to post a review on the owner
     //the rating is /5  
-    this.dataService.postReviewOnWalker( getAuth().currentUser.email ,this.walkerEmail, this.rating , this.reviewText);
+    this.dataService.postReviewOnWalker(getAuth().currentUser.email, this.walkerEmail, this.rating, this.reviewText);
     this.router.navigate(['/my-walks-owner']);
   }
-  
 
-  skip(){
+  
+  sendMessage(){
+    //the walker would like to send a message
+    
+    //from , text , time
+    const d: Date = new Date();
+    console.log("sendiung test " , this.messageText);
+    this.dataService.sendMessage(this.rapidWalkId ,this.ownerEmail , this.messageText , d);
+  }
+
+
+  skip() {
     this.router.navigate(['/my-walks-owner']);
   }
 
