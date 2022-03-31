@@ -113,6 +113,15 @@ const routes: Routes = [
     path: 'my-profile-owner',
     loadChildren: () => import('./pages/dog-owner/my-profile-owner/my-profile-owner.module').then( m => m.MyProfileOwnerPageModule)
   },
+  {
+    path: 'upload-image',
+    loadChildren: () => import('./pages/dog-owner/upload-image/upload-image.module').then( m => m.UploadImagePageModule)
+  },
+  {
+    path: 'upload-image',
+    loadChildren: () => import('./pages/dog-owner/upload-image/upload-image.module').then( m => m.UploadImagePageModule)
+  },
+
  
 ];
 

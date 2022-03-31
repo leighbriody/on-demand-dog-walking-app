@@ -1,15 +1,16 @@
 
 
 
-import { getAuth } from 'firebase/auth';
+
+import { getAuth, signOut } from 'firebase/auth';
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, docData } from '@angular/fire/firestore';
 import { addDoc, arrayUnion, doc, getDoc, query, setDoc, updateDoc, where } from 'firebase/firestore';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { runInThisContext } from 'vm';
 import { stat } from 'fs';
-
+import { getDownloadURL, getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
 
 //here we ill export the DTO objects as interfaces
 export interface DogOwner {
@@ -55,8 +56,8 @@ export interface Dog {
 export interface Request {
   id: string;
   email: string;
- // dogs: string[];
-   dogs:Dog[]
+  // dogs: string[];
+  dogs: Dog[]
   county: string;
   name: string;
   numberPets: number;
@@ -69,10 +70,10 @@ export interface Request {
 }
 
 export interface Message {
-  
-  from:string;
-  text:string;
-  time:number;
+
+  from: string;
+  text: string;
+  time: number;
 
 }
 
@@ -159,9 +160,18 @@ export interface walkerReview {
 }
 
 export interface pet {
-  petId:string;
-  petName:String;
-  petImg:string
+  petId: string;
+  petName: String;
+  petImg: string
+}
+
+export interface UserPhoto {
+  blob: string;
+  webviewPath: string;
+}
+
+export interface ImageUrl {
+  url: string;
 }
 
 @Injectable({
@@ -257,12 +267,12 @@ export class DataService {
     return docData(docRef, { idField: 'id' }) as Observable<DogWalker>;
   }
 
-  sendWalkersRequest(dogsPickedId:Dog[], lat: string, lng: string, firstName:string , county:string , email:string ,  numberPets: number, durationMins: number, price: number, note: string) {
+  sendWalkersRequest(dogsPickedId: Dog[], lat: string, lng: string, firstName: string, county: string, email: string, numberPets: number, durationMins: number, price: number, note: string) {
 
-   console.log("Dog owner object data side first name : " , firstName );
+    console.log("Dog owner object data side first name : ", firstName);
 
     const requestRef = collection(this.firestore, 'walkrequests/');
-    return addDoc(requestRef, { id: requestRef.id, name: firstName , county: county, numPets: 2, durationMins: durationMins, price: price, lat: lat, lng: lng, dogs: dogsPickedId, note: note }).then(res => {
+    return addDoc(requestRef, { id: requestRef.id, name: firstName, county: county, numPets: 2, durationMins: durationMins, price: price, lat: lat, lng: lng, dogs: dogsPickedId, note: note }).then(res => {
       const docId = res.id
       let docRef = doc(this.firestore, "walkrequests" + "/" + docId)
 
@@ -460,12 +470,12 @@ export class DataService {
     return collectionData(ownersPetsRef, { idField: 'id' }) as Observable<rapidwalk[]>;
   }
 
-  async sendMessage(rapidwalkId:string , from:string , text:string  , date:Date){
+  async sendMessage(rapidwalkId: string, from: string, text: string, date: Date) {
 
-    
+
     //add dog and store its id in a field
-    const messagesRef = collection(this.firestore, 'rapidwalks/', rapidwalkId , '/messages');
-    return addDoc(messagesRef, {from:from , text:text , time:date.getTime()}).then(res => {
+    const messagesRef = collection(this.firestore, 'rapidwalks/', rapidwalkId, '/messages');
+    return addDoc(messagesRef, { from: from, text: text, time: date.getTime() }).then(res => {
       const docId = res.id
 
       let docRef = doc(this.firestore, "rapidwalks/", rapidwalkId, "/messages/" + docId)
@@ -474,20 +484,43 @@ export class DataService {
         from: from,
         text: text,
         time: date.getTime(),
-    
+
       })
     })
-    
 
 
-    
+
+
+
+  }
+  getRapidWalkMessages(rapidWalkId: string) {
+
+    //need to get the rapid walk and update the status field to finished
+    const docRef = collection(this.firestore, "rapidwalks/" + rapidWalkId + '/messages');
+    return collectionData(docRef, { idField: 'id' }) as Observable<Message[]>;
+  }
+
+  uploadImage(file) {
+    const storage = getStorage();
+    let imageName = Date.now();
+    const storageRef = ref(storage, imageName.toString());
+    // 'file' comes from the Blob or File API
+    uploadBytes(storageRef, file).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
+      console.log(snapshot.metadata.fullPath);
+      console.log(snapshot.metadata.bucket);
+      console.log(snapshot.ref.fullPath);
+    });
+
+  }
   
-  }
-  getRapidWalkMessages(rapidWalkId:string){
 
-     //need to get the rapid walk and update the status field to finished
-     const docRef = collection(this.firestore, "rapidwalks/" + rapidWalkId + '/messages' );
-     return collectionData(docRef, { idField: 'id' }) as Observable<Message[]>;
-  }
+
+
+
+
+
+
+
 
 }

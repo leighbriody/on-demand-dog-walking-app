@@ -80,11 +80,8 @@ export class AuthService {
   }
 
   loginAsOwner(email:string , password:string  ){
-
     signInWithEmailAndPassword(this.auth , email ,password).then(cred => {
-      //clear fields and re direct
-    
-      console.log("login walker triggered in autth" , email , password);
+      //clear fields and re direc
       this.router.navigateByUrl('/owner-home');
     })
     

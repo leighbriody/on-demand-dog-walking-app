@@ -16,10 +16,12 @@ import { GoogleMapsModule } from '@angular/google-maps'
 
 
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [GoogleMapsModule , BrowserModule, IonicModule.forRoot(), AppRoutingModule, provideFirebaseApp(() => initializeApp(environment.firebase)), provideAuth(() => getAuth()), provideFirestore(() => getFirestore())],
+  imports: [
+    GoogleMapsModule , BrowserModule, IonicModule.forRoot(), AppRoutingModule, provideFirebaseApp(() => initializeApp(environment.firebase)), provideAuth(() => getAuth()), provideFirestore(() => getFirestore())],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })

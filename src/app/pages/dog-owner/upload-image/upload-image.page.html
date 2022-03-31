@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>upload-image</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+      </ion-col>
+      <ion-col>
+        <ion-avatar>
+       
+      </ion-avatar>
+      </ion-col>
+      <ion-col>
+        <ion-img [src]=""></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+   <!--HERE WE HAVE THE ADD PET FORM-->
+
+  <!--profile picture needs to be here-->
+  <ion-item>
+    <ion-label position="floating">Pet Name</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Breed</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Age</ion-label>
+    <ion-input type="number"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Description</ion-label>
+    <ion-input ></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Gender</ion-label>
+    <ion-input ></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Height</ion-label>
+    <ion-input ></ion-input>
+  </ion-item>
+
+  <ion-list style="text-align:center">
+    <ion-button expand="block" fill="clear" color="transparent" >Add New Pet</ion-button>
+  </ion-list>
+  <ion-list style="text-align:center">
+    <ion-button expand="block" (click)="getImage()" fill="clear" color="transparent" >Get image</ion-button>
+  </ion-list>
+
+  <ion-list style="text-align:center">
+    <ion-button expand="block" (click)="uploadImageToFirebase()" fill="clear" color="transparent" >Add Image To Firebase</ion-button>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="addPhotoToGallery()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  
+
+  <h1>Web View : {{webView}}</h1>
+  <h1>File: {{blob}}</h1>
+</ion-content>
