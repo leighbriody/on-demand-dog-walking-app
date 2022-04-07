@@ -39,3 +39,12 @@ ion-content {
 
 
 //Auth.scss in common
+.profile-photo {
+  
+    border-radius: 10% !important;
+    overflow: hidden;
+    width: 50%;
+    height: auto;
+    margin: auto;
+    display: block;
+}

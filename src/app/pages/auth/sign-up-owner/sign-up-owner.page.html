@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar  color="primary"> 
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
@@ -10,49 +10,72 @@
 
 <ion-content [fullscreen]="true">
 
-<ion-content>
-<ion-content>
-  <div class="card-background"></div>
-  <div class="flex-view">
-    <div>
-      
-      <h1 class="ion-text-center">Sign Up As Owner </h1>
-      <p class="ion-text-center">Sign up as dog owner to start giving your dogs the walks they deserve.</p>
-    </div>
+  <ion-content>
+    <ion-content>
+      <div class="card-background"></div>
+      <div class="flex-view">
+        <div>
 
-    <!--Here we have tre card which dispays input for the email and password-->
-    <div class="input-card">
-      <ion-item class="floating-input">
-        <ion-label position="floating">E-mail</ion-label>
-        <ion-input  [(ngModel)]="email"></ion-input>
-      </ion-item>
-      <ion-item class="floating-input">
-        <ion-label position="floating">Password</ion-label>
-        <ion-input #passwordInput clearOnEdit="false"  [(ngModel)]="password" [type]="show ? 'text' : 'password'"></ion-input>
-        <ion-button slot="end"  shape="round" color="dark" fill="clear">
-         
-        </ion-button>
-        <ion-icon name="eye" slot="end" (click)="showPassword()" color="primary"></ion-icon>
-      </ion-item>
-      <ion-item class="floating-input">
-        <ion-label position="floating">Password</ion-label>
-        <ion-input clearOnEdit="false" type="password" [type]="show ? 'text' : 'password'"></ion-input>
-      </ion-item>
-      <ion-button  class="custom-button" expand="block" (click)="signUp()">
-        Sign up
-      </ion-button>
-    </div>
-    <div>
-      
-      <div class="ion-text-center social-auth">
-        <ion-icon name="logo-facebook"></ion-icon>
-        <ion-icon name="logo-google"></ion-icon>
-        <ion-icon name="logo-twitter"></ion-icon>
+          <h1 class="ion-text-center">Sign Up As Owner </h1>
+          <p class="ion-text-center">Sign up as dog owner to start giving your dogs the walks they deserve.</p>
+        </div>
+
+        <!--Here we have tre card which dispays input for the email and password-->
+        <div class="input-card" style="text-align:center;">
+          <!--Upload image item-->
+
+          
+
+            <ion-img *ngIf="imagePath != null " [src]="imagePath" class="profile-photo"></ion-img>
+            <ion-button *ngIf="imagePath != null " style="text-align:center" class="text" (click)="deletePhoto()">
+              Remove Image
+              <ion-icon name="close-outline" (click)="deletePhoto()"></ion-icon>
+            
+              
+            </ion-button>
+
+            <ion-button *ngIf="imagePath == null " style="text-align:center" class="text" (click)="takePicture()">
+              Upload Image
+              <ion-icon name="person-circle-outline"></ion-icon>
+              <ion-icon name="camera-outline"></ion-icon>
+              +
+            </ion-button>
+
+
+
+
+            <ion-item class="floating-input">
+              <ion-label position="floating">E-mail</ion-label>
+              <ion-input [(ngModel)]="email"></ion-input>
+            </ion-item>
+            <ion-item class="floating-input">
+              <ion-label position="floating">Password</ion-label>
+              <ion-input #passwordInput clearOnEdit="false" [(ngModel)]="password" [type]="show ? 'text' : 'password'">
+              </ion-input>
+              <ion-button slot="end" shape="round" color="dark" fill="clear">
+
+              </ion-button>
+              <ion-icon name="eye" slot="end" (click)="showPassword()" color="primary"></ion-icon>
+            </ion-item>
+            <ion-item class="floating-input">
+              <ion-label position="floating">Password</ion-label>
+              <ion-input clearOnEdit="false" type="password" [type]="show ? 'text' : 'password'"></ion-input>
+            </ion-item>
+            <ion-button class="custom-button" expand="block" (click)="signUp()">
+              Sign up
+            </ion-button>
+        </div>
+        <div>
+
+          <div class="ion-text-center social-auth">
+            <ion-icon name="logo-facebook"></ion-icon>
+            <ion-icon name="logo-google"></ion-icon>
+            <ion-icon name="logo-twitter"></ion-icon>
+          </div>
+
+          <ion-button fill="clear" routerLink="/login-owner" routerDirection="back">
+            Already have an account as dog owner ? <br>Sign in
+          </ion-button>
+        </div>
       </div>
-
-      <ion-button fill="clear" routerLink="/login-owner" routerDirection="back">
-        Already have an account as dog owner ? <br>Sign in
-      </ion-button>
-    </div>
-  </div>
-</ion-content>
+    </ion-content>

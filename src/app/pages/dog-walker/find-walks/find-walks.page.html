@@ -61,9 +61,10 @@
               <ion-col *ngFor="let dog of request.dogs">
                 <ion-chip>
                   <ion-avatar>
-                    <img src="../../../../assets/img/find-walks/dog-icon.png">
+                    <img [src]="dog.profileImageUrl">
                   </ion-avatar>
                   <ion-label>{{dog.name}} </ion-label>
+                  <ion-label>{{dog.profileImageUrl}} </ion-label>
                 </ion-chip>
 
               </ion-col>

@@ -11,6 +11,32 @@
 <ion-content>
   <!--HERE WE HAVE THE ADD PET FORM-->
 
+  <!--Add pet image-->
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+      </ion-col>
+      <ion-col>
+       
+
+        <ion-img *ngIf="imagePath != null " [src]="imagePath"></ion-img>
+        <ion-img *ngIf="imagePath == null " src="../../../../assets/img/add-pets/dog.png"></ion-img>
+
+        <!--  <ion-button ><ion-icon name="close-circle-outline"></ion-icon></ion-button>-->
+        <ion-button *ngIf="imagePath == null" (click)="takePicture()">
+          <ion-icon name="camera-outline"></ion-icon>
+        </ion-button>
+
+        <ion-button *ngIf="imagePath != null" (click)="deleteImage()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
   <!--profile picture needs to be here-->
   <ion-item>
     <ion-label position="floating">Pet Name</ion-label>
@@ -46,42 +72,42 @@
     <ion-button expand="block" fill="clear" color="transparent" (click)="addNewPet()">Add New Pet</ion-button>
   </ion-list>
 
-  <ion-list style="text-align:center">
-    <ion-button expand="block" fill="clear" color="transparent" [routerLink]="['/','upload-image']">Upload Image</ion-button>
-  </ion-list>
+
+  
 </ion-content>
 
 
 <!--DOG OWNER TABS-->
 <ion-footer>
-  <ion-tabs>  
-      <ion-fab vertical="bottom" horizontal="center" translucent="true">
-        <ion-fab-button >
-          <img src="../../../../assets/img/owner-home/lead.png">
-        </ion-fab-button>
-      </ion-fab>
-      
-      <ion-tab-bar slot="bottom" class="ion-no-border">
-        <ion-tab-button tab="tab-encounters">
-          <ion-icon name="home"></ion-icon>
-        </ion-tab-button>
-    
-        <ion-tab-button tab="tab-conversations" class="comments" class="active">
-          <ion-icon name="paw"></ion-icon>
-        
-        </ion-tab-button>
-    
-        <svg height="50" viewBox="0 0 100 50" width="100" xmlns="http://www.w3.org/2000/svg"><path d="M100 0v50H0V0c.543 27.153 22.72 49 50 49S99.457 27.153 99.99 0h.01z" fill="red" fill-rule="evenodd"></path></svg>
-    
-        <ion-tab-button tab="tab-notifications" class="notifs">
-          <ion-icon name="walk"></ion-icon>
-         
-        </ion-tab-button>
-    
-        <ion-tab-button tab="tab-profile">
-          <ion-icon name="person"></ion-icon>
-        </ion-tab-button>
-      </ion-tab-bar>
-    </ion-tabs>
-  </ion-footer>
-    
+  <ion-tabs>
+    <ion-fab vertical="bottom" horizontal="center" translucent="true">
+      <ion-fab-button [routerLink]="['/','choose-walk-details']">
+        <img src="../../../../assets/img/owner-home/lead.png">
+      </ion-fab-button>
+    </ion-fab>
+
+    <ion-tab-bar slot="bottom" class="ion-no-border">
+      <ion-tab-button tab="tab-encounters" [routerLink]="['/','owner-home']">
+        <ion-icon name="home"></ion-icon>
+      </ion-tab-button>
+
+      <ion-tab-button tab="tab-conversations" class="comments" [routerLink]="['/','owner-pets']">
+        <ion-icon name="paw"></ion-icon>
+        <ion-badge></ion-badge>
+      </ion-tab-button>
+
+      <svg height="50" viewBox="0 0 100 50" width="100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 0v50H0V0c.543 27.153 22.72 49 50 49S99.457 27.153 99.99 0h.01z" fill="red" fill-rule="evenodd">
+        </path>
+      </svg>
+
+      <ion-tab-button tab="tab-notifications" class="notifs" [routerLink]="['/','my-walks-owner']">
+        <ion-icon name="walk"></ion-icon>
+      </ion-tab-button>
+
+      <ion-tab-button tab="tab-profile" [routerLink]="['/','my-profile-owner']">
+        <ion-icon name="person"></ion-icon>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+</ion-footer>

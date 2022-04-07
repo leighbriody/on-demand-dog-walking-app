@@ -6,7 +6,7 @@ import { PhotoService } from '../../../services/photo.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FileUploadService } from 'src/app/services/file-upload.service';
 
-
+import { ref, Storage, getDownloadURL } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-upload-image',
@@ -15,7 +15,7 @@ import { FileUploadService } from 'src/app/services/file-upload.service';
 })
 export class UploadImagePage implements OnInit {
 
-  constructor(public photoService: PhotoService , private data:DataService, private file: FileUploadService ) { }
+  constructor(public photoService: PhotoService , private data:DataService , private storage : Storage) { }
 
   public photo: UserPhoto;
   webView
@@ -28,8 +28,7 @@ export class UploadImagePage implements OnInit {
 
     //get haha from firestore get the location
     let imageLocation = 'gs://testwalkies.appspot.com/haha'
-    this.imagePath = "gs://testwalkies.appspot.com/1648750701044"
-    let testPath = 1648751050197
+  
 
   }
 
@@ -47,13 +46,16 @@ export class UploadImagePage implements OnInit {
   
 
   uploadImageToFirebase(){
-    //we need to take the blob and upload to firebase
-    this.data.uploadImage(this.blob);
-    
+ 
   }
 
-  getImage(){
-    this.file.getImage();
+  async getImage(){
+    
+    let storageRef = ref(this.storage , "1648760664200");
+    let imageUrl = await getDownloadURL(storageRef);
+    this.imagePath = imageUrl;
+    console.log("storage url is " , imageUrl);
+
   }
 
 

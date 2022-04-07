@@ -22,6 +22,22 @@
 
     <!--Here we have tre card which dispays input for the email and password-->
     <div class="input-card">
+      <!--Here we will have the profile image-->
+      <ion-img *ngIf="imagePath != null " [src]="imagePath" class="profile-photo"></ion-img>
+            <ion-button *ngIf="imagePath != null " style="text-align:center" class="text" (click)="deletePhoto()">
+              Remove Image
+              <ion-icon name="close-outline" (click)="deletePhoto()"></ion-icon>
+            
+              
+            </ion-button>
+
+            <ion-button *ngIf="imagePath == null " style="text-align:center" class="text" (click)="takePicture()">
+              Upload Image
+              <ion-icon name="person-circle-outline"></ion-icon>
+              <ion-icon name="camera-outline"></ion-icon>
+              +
+            </ion-button>
+
       <!--FIRST NAME-->
       <ion-item class="floating-input">
         <ion-label position="floating">First Name</ion-label>

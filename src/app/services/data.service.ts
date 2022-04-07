@@ -50,6 +50,7 @@ export interface Dog {
   gender: string;
   height: string;
   isChecked: boolean;
+  profileImageUrl: string;
 
 }
 
@@ -197,10 +198,12 @@ export class DataService {
         description: newPet.description,
         height: newPet.height,
         isChecked: false,
-        name: newPet.name
+        name: newPet.name,
+        profileImageUrl: newPet.profileImageUrl
 
 
       })
+
     })
   }
 
@@ -500,26 +503,78 @@ export class DataService {
     return collectionData(docRef, { idField: 'id' }) as Observable<Message[]>;
   }
 
-  uploadImage(file) {
+  addPet2(file, newPet: Dog) {
+
+    let imageName = Date.now().toString();
+    let imageUrl
     const storage = getStorage();
-    let imageName = Date.now();
-    const storageRef = ref(storage, imageName.toString());
-    // 'file' comes from the Blob or File API
-    uploadBytes(storageRef, file).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-      console.log(snapshot.metadata.fullPath);
-      console.log(snapshot.metadata.bucket);
-      console.log(snapshot.ref.fullPath);
-    });
+    const storageRef = ref(storage, imageName);
+
+    //if file is != null 
+    if(file!=null){
+      uploadString(storageRef, file, 'base64').then(res => {
+        imageUrl = getDownloadURL(storageRef).then((url) => {
+          //now that we have the url we can add the pet
+          //add dog and store its id in a field
+          const petsRef = collection(this.firestore, 'dogowners/', getAuth().currentUser.email, '/pets');
+          return addDoc(petsRef, newPet).then(res => {
+            const docId = res.id
+  
+            let docRef = doc(this.firestore, "dogowners", getAuth().currentUser.email, "/pets/" + docId)
+  
+            setDoc(docRef, {
+              id: docId,
+              age: newPet.age,
+              breed: newPet.breed,
+              description: newPet.description,
+              height: newPet.height,
+              isChecked: false,
+              name: newPet.name,
+              profileImageUrl: url
+  
+  
+            })
+  
+          })
+        })
+  
+  
+      })
+    }else {
+      //no profile image so we just need to add the pet with default url
+      const petsRef = collection(this.firestore, 'dogowners/', getAuth().currentUser.email, '/pets');
+          return addDoc(petsRef, newPet).then(res => {
+            const docId = res.id
+  
+            let docRef = doc(this.firestore, "dogowners", getAuth().currentUser.email, "/pets/" + docId)
+  
+            setDoc(docRef, {
+              id: docId,
+              age: newPet.age,
+              breed: newPet.breed,
+              description: newPet.description,
+              height: newPet.height,
+              isChecked: false,
+              name: newPet.name,
+              profileImageUrl: "../../../../assets/img/add-pets/dog.png"
+  
+  
+            })
+  
+          })
+
+
+
+      
+    }
+   
+
+
+
+
+
 
   }
-  
-
-
-
-
-
-
 
 
 

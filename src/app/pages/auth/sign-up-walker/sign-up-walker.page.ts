@@ -1,6 +1,7 @@
 import { DogWalker } from './../../../services/data.service';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { PhotoService } from 'src/app/services/photo.service';
 
 @Component({
   selector: 'app-sign-up-walker',
@@ -23,10 +24,18 @@ export class SignUpWalkerPage implements OnInit {
    addressLine:string;
    county:string;
 
+    //photo variables
+  dogProgileImagePath
+  webView
+  blob
+  imagePath
+  storageRef
+  imageUrl
+
      // variable - default false for password
 show: boolean = false;
 
-  constructor(private auth : AuthService) { }
+  constructor(private auth : AuthService , private photoService: PhotoService) { }
 
   ngOnInit() {
   }
@@ -36,7 +45,18 @@ show: boolean = false;
   showUserPassword() {
     this.show = !this.show;
 }
+deletePhoto(){
+  this.imagePath = null;
+}
 
+takePicture() {
+  this.photoService.addNewToGallery().then(res => {
+
+    this.webView = res.webviewPath;
+    this.blob = res.blob;
+    this.imagePath = 'data:image/jpg;base64,' + this.blob;
+  })
+}
 
   SignUp(){
    
