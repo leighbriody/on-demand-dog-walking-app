@@ -18,6 +18,7 @@ export class FindingWalkersPage implements OnInit {
 
   constructor(private dataService: DataService, private activatedRouter: ActivatedRoute, private googleMapService: GoogleMapService) { }
 
+  currentUser: DogOwner;
   //data fields
   walkRequestId: string;
   markers = []
@@ -47,6 +48,14 @@ export class FindingWalkersPage implements OnInit {
   walkersWhoAcceptedRequest: walkersWhoAccepted[];
 
   ngOnInit() {
+
+
+    //init dog onwer
+    let currentOwnerEmail = getAuth().currentUser.email;
+    this.dataService.getOwnerByEmail(currentOwnerEmail).subscribe(res => {
+      this.currentUser = res;
+    })
+
     //we want to get the sub collection of walkers who accepted offer
     //get the id and log
     this.walkRequestId = this.activatedRouter.snapshot.paramMap.get("id");
@@ -77,7 +86,8 @@ export class FindingWalkersPage implements OnInit {
       lat: walker.lat,
       lng: walker.lng,
     }
-    this.addMarker(walker.lat, walker.lng);
+    //this.addMarker(walker.lat, walker.lng);
+    this.addWalkerMarker(walker.lat, walker.lng);
     this.googleMapService.currentLocation.next(this.center);
   }
 
@@ -94,8 +104,32 @@ export class FindingWalkersPage implements OnInit {
     this.newLat = "";
     this.newLong = "";
   }
+
+  addWalkerMarker(lat,lng){
+   
+    this.markers.push({
+      position:{
+        lat: lat,
+        lng: lng,
+     },
+     visible: true,
+     opacity: 0.6,
+     label: {
+        color: '#333',
+        text: 'My Label',
+     },
+     title: 'My Title',
+        options: {
+       draggable: false,
+       icon: '../../../../assets/img/map/lead.png'
+     }
+    });
+    this.googleMapService.markers.next(this.markers);
+    this.newLat = "";
+    this.newLong = "";
+  }
   //accept the requests
-  acceptWalkersRequest(walkRequestId: string, ownerEmail: string, walkerEmail: string, walkerLat: number, walkerLng: number , price:number , numberPets:number , durationMins:number) {
+  acceptWalkersRequest( object :walkersWhoAccepted  ,  walkerProfileImageUrl :string , walkRequestId: string, ownerEmail: string, walkerEmail: string, walkerLat: number, walkerLng: number , price:number , numberPets:number , durationMins:number ,  ) {
     let owner = <DogOwner>{};
     let walker = <DogWalker>{};
 
@@ -110,6 +144,7 @@ export class FindingWalkersPage implements OnInit {
         owner.street = res.street,
         owner.eircode = res.eircode,
         owner.email = res.email;
+        owner.profileImageUrl = res.profileImageUrl;
     })
 
     //get walker object
@@ -124,6 +159,7 @@ export class FindingWalkersPage implements OnInit {
         walker.addressLine = res.addressLine,
         walker.username = res.username,
         walker.availableCounty = res.availableCounty;
+        walker.profileImageUrl = res.profileImageUrl;
 
     })
 
@@ -138,7 +174,10 @@ export class FindingWalkersPage implements OnInit {
       let ownerLng = position.coords.longitude;
 
       //create the rapid walk
-      this.dataService.createRapidWalk(walkRequestId, ownerEmail, walkerEmail, price , numberPets , "walk details need to go in", walkerLat, walkerLng, ownerLat, ownerLng , durationMins);
+      console.log("walker image " , walker.profileImageUrl);
+      console.log("owner image " , owner.profileImageUrl);
+      let ownerProfileImageUrl = this.currentUser.profileImageUrl;
+      this.dataService.createRapidWalk(walkerProfileImageUrl , ownerProfileImageUrl ,  walkRequestId, ownerEmail, walkerEmail, price , numberPets , "walk details need to go in", walkerLat, walkerLng, ownerLat, ownerLng , durationMins ,object.dogs);
     })
 
   }

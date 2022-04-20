@@ -120,7 +120,11 @@ const routes: Routes = [
   {
     path: 'upload-image',
     loadChildren: () => import('./pages/dog-owner/upload-image/upload-image.module').then( m => m.UploadImagePageModule)
+  },  {
+    path: 'walker-profile',
+    loadChildren: () => import('./pages/dog-walker/walker-profile/walker-profile.module').then( m => m.WalkerProfilePageModule)
   },
+
 
  
 ];

@@ -49,7 +49,7 @@ export class AddPetPage implements OnInit {
       this.blob = null;
     }
     this.data.addPet2(this.blob , { id: "", name: this.name, breed: this.breed, age: this.age, description: this.description, gender: this.gender, height: this.height, isChecked: false, profileImageUrl: null });
-    
+
     //need to clear all fields and display a message
     this.age = null;
     this.breed = null;

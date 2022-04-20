@@ -12,7 +12,7 @@
 
   <!--Here we will display the map-->
   <google-map #mapel height="50%" width="100%" [zoom]="zoom" [center]="center">
-    <map-marker *ngFor="let marker of markers" [position]="marker.position" [label]="marker.label"
+    <map-marker *ngFor="let marker of markers" [position]="marker.position" 
       [title]="marker.title" [options]="marker.options">
     </map-marker>
     <map-polyline>
@@ -30,31 +30,44 @@
       <ion-card>
         <ion-item lines="none">
           <ion-avatar slot="start">
-            <img src="../../../../assets/img/find-walks/user1.jpg">
+            <img [src]="walker.profileImageUrl">
           </ion-avatar>
           <ion-label>
             <h3>{{walker.walkersFirstName}}</h3>
             <h4>{{walker.walkerEmail}}</h4>
-            <p>
-              <ion-icon name="star-outline"></ion-icon>
-              <ion-icon name="star-outline"></ion-icon>
-              <ion-icon name="star-outline"></ion-icon>
-              <ion-icon name="star-outline"></ion-icon>
-              <ion-icon name="star-outline"></ion-icon>
-            </p>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
             <ion-row>
               <ion-col>
                 {{walker.numberPets}} dogs <ion-icon name="paw"></ion-icon>
               </ion-col>
-              <ion-col>
-                € {{walker.price}}
-              </ion-col>
-              <ion-col>
-                {{walker.durationMins}} Mins
-              </ion-col>
             </ion-row>
+            <ion-row>
+              <ion-col *ngFor="let dog of walker.dogs">      
+                
+                  <ion-avatar>
+                    <!--<img src="../../../../assets/img/add-pets/dog.png">-->
+                    <img [src]="dog.profileImageUrl">
+                  </ion-avatar>
+                  <ion-label>{{dog.name}}</ion-label>
+                
+              </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  € {{walker.price}}
+                </ion-col>
+                <ion-col>
+                  {{walker.durationMins}} Minutes
+                 
+                </ion-col>
+              </ion-row>
+           
             <ion-button
-              (click)="acceptWalkersRequest(walker.walkRequestId , walker.ownerEmail ,walker.walkerEmail , walker.lat , walker.lng , walker.price ,walker.numberPets, walker.durationMins)">
+              (click)="acceptWalkersRequest(walker ,  walker.profileImageUrl ,  walker.walkRequestId , walker.ownerEmail ,walker.walkerEmail , walker.lat , walker.lng , walker.price ,walker.numberPets, walker.durationMins)">
               Accept</ion-button>
             <!--<ion-button>Decline </ion-button>-->
             <ion-button (click)="viewOnMap(walker)">View On Map </ion-button>

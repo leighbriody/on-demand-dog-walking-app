@@ -62,12 +62,83 @@
         <!--This needs to be changed to select box-->
         <ion-item class="floating-input">
           <ion-label position="floating">County</ion-label>
-          <ion-input  [(ngModel)]="county"></ion-input>
+          <ion-select value="brown" okText="Okay" cancelText="Dismiss" [(ngModel)]="county">
+            <ion-select-option value="Antrim">Antrim</ion-select-option>
+            <ion-select-option value="Armagh">Armagh</ion-select-option>
+            <ion-select-option value="Carlow">Carlow</ion-select-option>
+            <ion-select-option value="Cavan">Cavan</ion-select-option>
+            <ion-select-option value="Clare">Clare</ion-select-option>
+            <ion-select-option value="Cork">Cork</ion-select-option>
+            <ion-select-option value="Derry">Derry</ion-select-option>
+            <ion-select-option value="Donegal">Donegal</ion-select-option>
+            <ion-select-option value="Down">Down</ion-select-option>
+            <ion-select-option value="Dublin">Dublin</ion-select-option>
+            <ion-select-option value="Fermanagh">Fermanagh</ion-select-option>
+            <ion-select-option value="Galway">Galway</ion-select-option>
+            <ion-select-option value="Kerry">Kerry</ion-select-option>
+            <ion-select-option value="Kildare">Kildare</ion-select-option>
+            <ion-select-option value="Kilkenny">Kilkenny</ion-select-option>
+            <ion-select-option value="Laois">Laois</ion-select-option>
+            <ion-select-option value="Leitrim">Leitrim</ion-select-option>
+            <ion-select-option value="Limrick">Limrick</ion-select-option>
+            <ion-select-option value="Longford">Longford</ion-select-option>
+            <ion-select-option value="Louth">Louth</ion-select-option>
+            <ion-select-option value="Mayo">Mayo</ion-select-option>
+            <ion-select-option value="Meath">Meath</ion-select-option>
+            <ion-select-option value="Monaghan">Monaghan</ion-select-option>
+            <ion-select-option value="Offaly">Offaly</ion-select-option>
+            <ion-select-option value="Rosscommon">Rosscommon</ion-select-option>
+            <ion-select-option value="Sligo">Sligo</ion-select-option>
+            <ion-select-option value="Tipperary">Tipperary</ion-select-option>
+            <ion-select-option value="Tyrone">Tyrone</ion-select-option>
+            <ion-select-option value="Waterford">Waterford</ion-select-option>
+            <ion-select-option value="Westmeath">Westmeath</ion-select-option>
+            <ion-select-option value="Wexford">Wexford</ion-select-option>
+            <ion-select-option value="Wicklow">Wicklow</ion-select-option>
+          </ion-select>
         </ion-item>
            <!--This needs to be changed to select box-->
         <ion-item class="floating-input">
           <ion-label position="floating">Address line</ion-label>
           <ion-input  [(ngModel)]="addressLine"></ion-input>
+        </ion-item>
+        <!--Available county to walk from-->
+        <ion-item class="floating-input">
+          <ion-label position="floating">Available County To Walk</ion-label>
+          <ion-select value="brown" okText="Okay" cancelText="Dismiss" [(ngModel)]="availableCounty">
+            <ion-select-option value="Antrim">Antrim</ion-select-option>
+            <ion-select-option value="Armagh">Armagh</ion-select-option>
+            <ion-select-option value="Carlow">Carlow</ion-select-option>
+            <ion-select-option value="Cavan">Cavan</ion-select-option>
+            <ion-select-option value="Clare">Clare</ion-select-option>
+            <ion-select-option value="Cork">Cork</ion-select-option>
+            <ion-select-option value="Derry">Derry</ion-select-option>
+            <ion-select-option value="Donegal">Donegal</ion-select-option>
+            <ion-select-option value="Down">Down</ion-select-option>
+            <ion-select-option value="Dublin">Dublin</ion-select-option>
+            <ion-select-option value="Fermanagh">Fermanagh</ion-select-option>
+            <ion-select-option value="Galway">Galway</ion-select-option>
+            <ion-select-option value="Kerry">Kerry</ion-select-option>
+            <ion-select-option value="Kildare">Kildare</ion-select-option>
+            <ion-select-option value="Kilkenny">Kilkenny</ion-select-option>
+            <ion-select-option value="Laois">Laois</ion-select-option>
+            <ion-select-option value="Leitrim">Leitrim</ion-select-option>
+            <ion-select-option value="Limrick">Limrick</ion-select-option>
+            <ion-select-option value="Longford">Longford</ion-select-option>
+            <ion-select-option value="Louth">Louth</ion-select-option>
+            <ion-select-option value="Mayo">Mayo</ion-select-option>
+            <ion-select-option value="Meath">Meath</ion-select-option>
+            <ion-select-option value="Monaghan">Monaghan</ion-select-option>
+            <ion-select-option value="Offaly">Offaly</ion-select-option>
+            <ion-select-option value="Rosscommon">Rosscommon</ion-select-option>
+            <ion-select-option value="Sligo">Sligo</ion-select-option>
+            <ion-select-option value="Tipperary">Tipperary</ion-select-option>
+            <ion-select-option value="Tyrone">Tyrone</ion-select-option>
+            <ion-select-option value="Waterford">Waterford</ion-select-option>
+            <ion-select-option value="Westmeath">Westmeath</ion-select-option>
+            <ion-select-option value="Wexford">Wexford</ion-select-option>
+            <ion-select-option value="Wicklow">Wicklow</ion-select-option>
+          </ion-select>
         </ion-item>
 
       <!--Email-->

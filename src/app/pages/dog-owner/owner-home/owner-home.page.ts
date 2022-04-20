@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,15 +7,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./owner-home.page.scss', '../../../../tabs.scss'],
 })
 export class OwnerHomePage implements OnInit {
-
+  @ViewChild('rating') rating : any;
+  
   constructor(private router: Router) { }
 
-
+  stars
   slideOpts = {
     initialSlide: 1,
     speed: 400
   };
   ngOnInit() {
+    this.stars = 0;
   }
 
   needWalkingRedirect() {
@@ -25,6 +27,10 @@ export class OwnerHomePage implements OnInit {
 
   test() {
     console.log("test");
+  }
+
+  selectStars(number){
+    this.stars = number; 
   }
 
 }

@@ -2,6 +2,7 @@ import { DogWalker } from './../../../services/data.service';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { PhotoService } from 'src/app/services/photo.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-sign-up-walker',
@@ -23,6 +24,7 @@ export class SignUpWalkerPage implements OnInit {
    phoneNumber:string;
    addressLine:string;
    county:string;
+   availableCounty:string
 
     //photo variables
   dogProgileImagePath
@@ -35,7 +37,7 @@ export class SignUpWalkerPage implements OnInit {
      // variable - default false for password
 show: boolean = false;
 
-  constructor(private auth : AuthService , private photoService: PhotoService) { }
+  constructor(private auth : AuthService , private photoService: PhotoService , public loadingController: LoadingController) { }
 
   ngOnInit() {
   }
@@ -58,12 +60,18 @@ takePicture() {
   })
 }
 
-  SignUp(){
+  async SignUp(){
    
-    this.auth.SignUpAsDogWalker(this.email , this.password ,this.firstName , this.lastName , this.eircode , this.phoneNumber , this.county , this.addressLine );
+    this.auth.SignUpAsDogWalker(this.blob , this.email , this.password ,this.firstName , this.lastName , this.eircode , this.phoneNumber , this.county , this.addressLine , this.availableCounty );
      //clear fields
-     this.email ="";
-      this.password = "";
+     const loading = await this.loadingController.create({
+      spinner: null,
+      duration: 5000,
+      message: 'Please Wait .. ',
+      translucent: true,
+      cssClass: 'custom-class custom-loading'
+    });
+    return await loading.present();
   }
 
 }

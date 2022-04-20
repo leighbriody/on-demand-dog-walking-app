@@ -12,19 +12,19 @@
   <!--GOOGLE MAP -->
   <google-map #mapel height="60%" width="100%" [zoom]="zoom" [center]="center" *ngIf="walkFinished == false">
     <!--Owner marker-->
-    <map-marker *ngFor="let marker of markersOwner" [position]="marker.position" [label]="marker.label"
+    <map-marker *ngFor="let marker of markersOwner" [position]="marker.position"
       [title]="marker.title" [options]="marker.options">
     </map-marker>
 
     <!--Walker marker-->
-    <map-marker *ngFor="let marker of markersWalker" [position]="marker.position" [label]="marker.label"
+    <map-marker *ngFor="let marker of markersWalker" [position]="marker.position" 
       [title]="marker.title" [options]="marker.options">
     </map-marker>
 
-    <!--Live Walker markers-->
+    <!--Live Walker markers just want to show polyline not markers 
     <map-marker *ngFor="let marker of liveWalkMarkers" [position]="marker.position" [label]="marker.label"
       [title]="marker.title" [options]="marker.options">
-    </map-marker>
+    </map-marker>-->
     <map-polyline [options]="polylineOptions">
     </map-polyline>
   </google-map>
@@ -53,53 +53,53 @@
   <!--Live walk stats end -->
 
   <!--If walk not in progress show this-->
-  <ion-card *ngIf="walkInProgress == false && walkFinished == false">
-    <ion-item>
-      <ion-label>Make your way to the owner.</ion-label>
-    </ion-item>
-    <ion-card>
+  <!--If walk not in progress show this-->
+  <ion-card *ngIf="walkInProgress == false && walkFinished == false" >
+    <ion-item>Please make your way to the owner</ion-item>
       <ion-item lines="none">
         <ion-avatar slot="start">
-          <img src="../../../../assets/img/find-walks/user1.jpg">
+          <img [src]="ownerProfileImageUrl">
         </ion-avatar>
         <ion-label>
-          <h3>{{ownerName}}</h3>
+          <h2>{{ownerName}}</h2>
           <h3>{{ownerEmail}}</h3>
-          <h4>{{ownerCounty}}</h4>
           <p>
-            <ion-icon name="star-outline"></ion-icon>
-            <ion-icon name="star-outline"></ion-icon>
-            <ion-icon name="star-outline"></ion-icon>
-            <ion-icon name="star-outline"></ion-icon>
-            <ion-icon name="star-outline"></ion-icon>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
           </p>
           <ion-row>
             <ion-col>
-              {{numberPets}}dogs <ion-icon name="paw"></ion-icon>
+              {{numberPets}} dogs <ion-icon name="paw"></ion-icon>
             </ion-col>
             <ion-col>
               € {{price}}
             </ion-col>
             <ion-col>
-              {{expectedDuration}} Mins
+              {{expectedDuration}} Minutes
             </ion-col>
           </ion-row>
+  
+       
         </ion-label>
       </ion-item>
+      <ion-list lines="none">
+    
+      </ion-list>
+      <ion-card-content>
+        Please make your way to the owner , you can text them via chat below.
+        Once you have their furry friend and are ready to being the walk click
+        start !.
+      </ion-card-content>
+      <ion-button class="start-walk-btn" (click)="startWalk()">START WALK</ion-button>
     </ion-card>
-    <ion-list lines="none">
-      <ion-item>
-        <ion-button fill="outline" slot="end" class="view-me-btn">View me</ion-button>
-        <ion-button slot="end" class="view-walker-btn">View walker</ion-button>
-      </ion-item>
-    </ion-list>
-    <ion-card-content>
-      Please make your way to the owner , you can text them via chat below.
-      Once you have their furry friend and are ready to being the walk click
-      start !.
-    </ion-card-content>
-    <ion-button class="start-walk-btn" (click)="startWalk()">START WALK</ion-button>
-  </ion-card>
+
+
+
+
+
 
   <!--End walk button-->
   <ion-card *ngIf="walkInProgress == true">
@@ -192,15 +192,26 @@
     <!--Leave a review-->
     <ion-list lines="none">
       <ion-item>
-        Leave a review
+        Leave a review : {{rating}}
       </ion-item>
     </ion-list>
 
     <ion-item>
       <ion-row>
         <ion-col>
-          <ion-label>Rating /5</ion-label>
-          <ion-input [(ngModel)]="rating"></ion-input>
+  
+          <div class="rate">
+            <input type="radio" id="star5" name="rate" value="5" (click)="selectStars(5)" />
+            <label for="star5" title="text">5 stars</label>
+            <input type="radio" id="star4" name="rate" value="4" (click)="selectStars(4)"/>
+            <label for="star4" title="text">4 stars</label>
+            <input type="radio" id="star3" name="rate" value="3" (click)="selectStars(3)" />
+            <label for="star3" title="text">3 stars</label>
+            <input type="radio" id="star2" name="rate" value="2" (click)="selectStars(2)"/>
+            <label for="star2" title="text">2 stars</label>
+            <input type="radio" id="star1" name="rate" value="1" (click)="selectStars(1)"/>
+            <label for="star1" title="text">1 star</label>
+          </div>
         </ion-col>
       </ion-row>
     </ion-item>
@@ -232,8 +243,12 @@
 
 
 
+   
+
+
   <!--Chatbox-->
-  <ion-card>
+  <div scrollY="true" id="scroll-list">
+  <ion-card  *ngIf="walkFinished == false">
     <ion-grid>
       <ion-row *ngFor="let message of messages">
         <ion-col col-9 *ngIf="message.from!==walkerEmail" class="message"  [ngClass]="{'mymessage': message.from === walkerEmail, 'othermessage': message.from !== walkerEmail}">
@@ -257,8 +272,7 @@
     </ion-item>
     <ion-button (click)="sendMessage()">Send</ion-button>
     </ion-card>
-
+  </div>
 
 </ion-content>
 
-=

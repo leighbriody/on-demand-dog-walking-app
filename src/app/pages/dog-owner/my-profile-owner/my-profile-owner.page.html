@@ -1,2 +1,55 @@
 
 
+  <ion-card>
+    <ion-item lines="none">
+      <ion-avatar slot="start">
+        <img src="../../../../assets/img/find-walks/user1.jpg">
+      </ion-avatar>
+      <ion-label>
+        <h3>Leigh</h3>
+        <h3>Email : lbriody10@Gmail.com</h3>
+        <h4>Louth</h4>
+        <p>
+          <ion-icon name="star-outline"></ion-icon>
+          <ion-icon name="star-outline"></ion-icon>
+          <ion-icon name="star-outline"></ion-icon>
+          <ion-icon name="star-outline"></ion-icon>
+          <ion-icon name="star-outline"></ion-icon>
+        </p>
+        <ion-row>
+          <ion-col>
+            2 dogs <ion-icon name="paw"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col >
+
+            <ion-chip>
+              <ion-avatar>
+                <img src="../../../../assets/img/add-pets/dog.png">
+              </ion-avatar>
+              <ion-label>Rex </ion-label>
+            </ion-chip>
+          </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              € 20
+            </ion-col>
+            <ion-col>
+              50 Minutes
+             
+            </ion-col>
+          </ion-row>
+       
+      
+        <ion-button *ngIf="acceptBtns[i] != 'Waiting'  && request.rapidWalkId == null"  (click)="acceptRequest(request , i)">Accept</ion-button>
+        <ion-button *ngIf="acceptBtns[i] === 'Waiting' && request.rapidWalkId == null" >Waiting .. </ion-button>
+        <!--If the walk is accept , or there is a rapid id field on it we need to display start walking-->
+        <ion-button *ngIf="request.rapidWalkId != null" (click)="joinRapidWalk(request.rapidWalkId)">Join Walk
+        </ion-button>
+       <!-- <ion-button (click)="declineRequest(request)">Decline</ion-button> -->
+        <ion-button (click)="viewOwnerOnMap(request)">View On Map</ion-button>
+      </ion-label>
+    </ion-item>
+  </ion-card>

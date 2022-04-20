@@ -11,6 +11,7 @@
 
 <ion-content>
   <!--LIST OF PETS-->
+
   <ion-grid>
     <ion-row>
       <ion-col sizeLg="6" sizeMd="6" sizeXs="6" *ngFor="let pet of ownersPets">
@@ -28,11 +29,12 @@
               <ion-col>
                 <label class="view-btn">View</label>
               </ion-col>
-              <ion-col>
-                <label class="edit-btn">Edit</label>
+              <ion-col  (click)="test()">
+                <label class="edit-btn" (click)="test()">Edit</label>
               </ion-col>
               <ion-col>
-                <label class="remove-btn">Remove</label>
+                
+                <label class="remove-btn" (click)="removePet(pet.id)">Remove</label>
               </ion-col>
             </ion-row>
           </ion-card-content>

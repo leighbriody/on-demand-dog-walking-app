@@ -5,7 +5,7 @@
 import { getAuth, signOut } from 'firebase/auth';
 import { Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, docData } from '@angular/fire/firestore';
-import { addDoc, arrayUnion, doc, getDoc, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { addDoc, arrayUnion, deleteDoc, doc, getDoc, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { runInThisContext } from 'vm';
@@ -22,6 +22,7 @@ export interface DogOwner {
   eircode: string;
   phone: string;
   street: string;
+  profileImageUrl:string
 }
 
 export interface geo {
@@ -37,6 +38,7 @@ export interface DogWalker {
   addressLine: string;
   username: string;
   availableCounty: string;
+  profileImageUrl:string;
 
 
 }
@@ -68,6 +70,9 @@ export interface Request {
   rapidWalkId: string;
   lat: number;
   lng: number;
+  profileImageUrl: string;
+  //user profile image
+ 
 }
 
 export interface Message {
@@ -95,6 +100,8 @@ export interface walkersWhoAccepted {
   date: string;
   lat: number;
   lng: number;
+  profileImageUrl:string;
+  dogs: Dog[];
 }
 
 export interface geopoint {
@@ -142,6 +149,9 @@ export interface rapidwalk {
   walkerLat: number;
   walkerEmail: string;
   id: string;
+  walkerProfileImageUrl:string;
+  ownerProfileImageUrl:string;
+  dogs:Dog[]
 }
 
 export interface ownerReview {
@@ -175,6 +185,9 @@ export interface ImageUrl {
   url: string;
 }
 
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -183,7 +196,6 @@ export class DataService {
   constructor(private firestore: Firestore, private router: Router) { }
 
   addNewPet(newPet: Dog) {
-
     //add dog and store its id in a field
     const petsRef = collection(this.firestore, 'dogowners/', getAuth().currentUser.email, '/pets');
     return addDoc(petsRef, newPet).then(res => {
@@ -200,7 +212,6 @@ export class DataService {
         isChecked: false,
         name: newPet.name,
         profileImageUrl: newPet.profileImageUrl
-
 
       })
 
@@ -254,6 +265,7 @@ export class DataService {
     return docData(docRef, { idField: 'id' }) as Observable<DogOwner>;
   }
 
+
   getWalkRequestById(walkRequestId: string): Observable<Request> {
     const docRef = doc(this.firestore, "walkrequests/" + walkRequestId);
     return docData(docRef, { idField: 'id' }) as Observable<Request>;
@@ -270,12 +282,12 @@ export class DataService {
     return docData(docRef, { idField: 'id' }) as Observable<DogWalker>;
   }
 
-  sendWalkersRequest(dogsPickedId: Dog[], lat: string, lng: string, firstName: string, county: string, email: string, numberPets: number, durationMins: number, price: number, note: string) {
+  sendWalkersRequest(dogsPickedId: Dog[], lat: string, lng: string,profileImageUrl :string ,  firstName: string, county: string, email: string, numberPets: number, durationMins: number, price: number, note: string) {
 
     console.log("Dog owner object data side first name : ", firstName);
 
     const requestRef = collection(this.firestore, 'walkrequests/');
-    return addDoc(requestRef, { id: requestRef.id, name: firstName, county: county, numPets: 2, durationMins: durationMins, price: price, lat: lat, lng: lng, dogs: dogsPickedId, note: note }).then(res => {
+    return addDoc(requestRef, { id: requestRef.id, name: firstName, county: county, numPets: 2, durationMins: durationMins, price: price, lat: lat, lng: lng, dogs: dogsPickedId, note: note ,     profileImageUrl : profileImageUrl  }).then(res => {
       const docId = res.id
       let docRef = doc(this.firestore, "walkrequests" + "/" + docId)
 
@@ -290,7 +302,8 @@ export class DataService {
         lat: lat,
         lng: lng,
         dogs: dogsPickedId,
-        note: note
+        note: note,
+        profileImageUrl : profileImageUrl,
 
 
       })
@@ -308,7 +321,7 @@ export class DataService {
     const durationMins = request.durationMins;
     const date = "to be added";
     const walkRequestRef = collection(this.firestore, 'walkrequests/' + request.id + '/walkersWhoAccepted/');
-    return addDoc(walkRequestRef, { ownerEmail: ownerEmail, walkerEmail: walkerEmail, numberPets: numberPets, durationMins: durationMins, price, status: status, date: date, walkRequestId: request.id, lat: lat, lng: lng });
+    return addDoc(walkRequestRef, { ownerEmail: ownerEmail, walkerEmail: walkerEmail, numberPets: numberPets,   durationMins: durationMins, price, status: status, date: date, walkRequestId: request.id, lat: lat, lng: lng  , profileImageUrl:dogWalkerUser.profileImageUrl , dogs:request.dogs});
   }
 
 
@@ -318,7 +331,7 @@ export class DataService {
     return collectionData(walkersWhoAcceptedRequestsRef, { idField: 'id' }) as Observable<walkersWhoAccepted[]>;
   }
 
-  createRapidWalk(requestId: string, ownerEmail: string, walkerEmail: string, price: number, numberPets: number, walkDetails: string, walkerLat: number, walkerLng: number, ownerLat: number, ownerLng: number, durationMins: number) {
+  createRapidWalk(walkerProfileImageUrl:string , ownerProfileImageUrl:string ,requestId: string, ownerEmail: string, walkerEmail: string, price: number, numberPets: number, walkDetails: string, walkerLat: number, walkerLng: number, ownerLat: number, ownerLng: number, durationMins: number , dogs: Dog[]) {
 
     const rapidWalkRef = collection(this.firestore, 'rapidwalks/');
 
@@ -328,7 +341,7 @@ export class DataService {
 
     let timeCreated = "change this current date time"
     //we need targetWalkDuration currentWalkDuration , currentDistance
-    return addDoc(rapidWalkRef, { walkRequestId: requestId, walkerEmail: walkerEmail, ownerEmail: ownerEmail, price: price, numberPets: numberPets, timeCreated: timestamp, walkDistance: 0, walkDuration: 0, walkStatus: "awaitingStart", walkerLat: walkerLat, walkerLng: walkerLng, ownerLat: ownerLat, ownerLng: ownerLng, durationMins: durationMins }).then(async res => {
+    return addDoc(rapidWalkRef, { walkRequestId: requestId, walkerEmail: walkerEmail, ownerEmail: ownerEmail, price: price, numberPets: numberPets, timeCreated: timestamp, walkDistance: 0, walkDuration: 0, walkStatus: "awaitingStart", walkerLat: walkerLat, walkerLng: walkerLng, ownerLat: ownerLat, ownerLng: ownerLng, durationMins: durationMins  , ownerProfileImageUrl: ownerProfileImageUrl , walkerProfileImageUrl: walkerProfileImageUrl , dogs:dogs}).then(async res => {
       const docId = res.id
       console.log("adding rapid walk id ", docId, " to walkrequest id ", requestId);
 
@@ -416,7 +429,7 @@ export class DataService {
     console.log("posting review on walker ", walkerEmail, " for rating of ", rating, "with text ", reviewText);
     //add dog and store its id in a field
     const ownerReviewsRef = collection(this.firestore, 'dogwalkers/', walkerEmail, '/reviews');
-    return addDoc(ownerReviewsRef, { ownerEmail: walkerEmail }).then(res => {
+    return addDoc(ownerReviewsRef, { ownerEmail: ownerEmail , walkerEmail : walkerEmail ,     reviewLeftBy: ownerEmail,  rating: rating,    reviewText: reviewText, }).then(res => {
       const docId = res.id
 
       let docRef = doc(this.firestore, "dogowners", walkerEmail, "/reviews/" + docId)
@@ -438,7 +451,7 @@ export class DataService {
 
     //add dog and store its id in a field
     const ownerReviewsRef = collection(this.firestore, 'dogowners/', ownerEmail, '/reviews');
-    return addDoc(ownerReviewsRef, { ownerEmail: ownerEmail }).then(res => {
+    return addDoc(ownerReviewsRef, { ownerEmail: ownerEmail , reviewLeftBy: walkerEmail,  rating: rating,   reviewText: reviewText,}).then(res => {
       const docId = res.id
 
       let docRef = doc(this.firestore, "dogowners", ownerEmail, "/reviews/" + docId)
@@ -473,6 +486,12 @@ export class DataService {
     return collectionData(ownersPetsRef, { idField: 'id' }) as Observable<rapidwalk[]>;
   }
 
+  async removePet(userEmail , petId){
+    // await deleteDoc(doc(this.firestore , 'users/' + email + '/modules/' + moduleId));
+
+    await deleteDoc(doc (this.firestore, 'dogowner/' + userEmail + '/pets/' + petId ));
+  }
+
   async sendMessage(rapidwalkId: string, from: string, text: string, date: Date) {
 
 
@@ -504,12 +523,10 @@ export class DataService {
   }
 
   addPet2(file, newPet: Dog) {
-
     let imageName = Date.now().toString();
     let imageUrl
     const storage = getStorage();
     const storageRef = ref(storage, imageName);
-
     //if file is != null 
     if(file!=null){
       uploadString(storageRef, file, 'base64').then(res => {
@@ -519,9 +536,7 @@ export class DataService {
           const petsRef = collection(this.firestore, 'dogowners/', getAuth().currentUser.email, '/pets');
           return addDoc(petsRef, newPet).then(res => {
             const docId = res.id
-  
             let docRef = doc(this.firestore, "dogowners", getAuth().currentUser.email, "/pets/" + docId)
-  
             setDoc(docRef, {
               id: docId,
               age: newPet.age,
@@ -530,24 +545,19 @@ export class DataService {
               height: newPet.height,
               isChecked: false,
               name: newPet.name,
-              profileImageUrl: url
-  
+              profileImageUrl: url 
   
             })
   
           })
         })
-  
-  
       })
     }else {
       //no profile image so we just need to add the pet with default url
       const petsRef = collection(this.firestore, 'dogowners/', getAuth().currentUser.email, '/pets');
           return addDoc(petsRef, newPet).then(res => {
             const docId = res.id
-  
             let docRef = doc(this.firestore, "dogowners", getAuth().currentUser.email, "/pets/" + docId)
-  
             setDoc(docRef, {
               id: docId,
               age: newPet.age,
@@ -557,10 +567,8 @@ export class DataService {
               isChecked: false,
               name: newPet.name,
               profileImageUrl: "../../../../assets/img/add-pets/dog.png"
-  
-  
             })
-  
+
           })
 
 

@@ -1,3 +1,4 @@
+import { getAuth } from '@angular/fire/auth';
 
 import { element } from 'protractor';
 import { DataService, DogWalker } from 'src/app/services/data.service';
@@ -30,6 +31,8 @@ export class FindWalksPage implements OnInit {
     speed: 400
   };
 
+  selectedCounty
+
   //google map settings
   zoom = 14;
   markers = []
@@ -51,9 +54,13 @@ export class FindWalksPage implements OnInit {
   constructor(private dataservice: DataService, private router: Router, private googleMapService: GoogleMapService) { }
   @ViewChild('mapel') googlemaps: google.maps.Map;
   ngOnInit() {
+
+    let currentWalkerEmail = getAuth().currentUser.email;
     //get the logged in walker users county which they are available to walk
-    this.dataservice.getDogWalkerUser().subscribe((data: DogWalker) => {
+    this.dataservice.getWalkerByEmail(currentWalkerEmail).subscribe((data: DogWalker) => {
       this.availableCounty = data.availableCounty;
+      this.dogWalkerUser = data;
+      console.log("Dog walker user ", data);
       this.dataservice.getActiveRequestsForCounty(this.availableCounty).subscribe(res => {
         this.requests = res;
       })
@@ -80,16 +87,27 @@ export class FindWalksPage implements OnInit {
 
   }
 
+
+
   //accept the walkers request
   acceptRequest(request: Request, int: number) {
 
-    //need to get the current walkers long and lat and add to accept request
-    this.acceptBtns[int] = "Waiting"
-    //then accept the walk request
-    navigator.geolocation.getCurrentPosition((position) => { //use geo location getting the current co ordinates and passing into current location
-      this.googleMapService.currentLocation.next(this.center);
-      this.dataservice.acceptOwnersWalkRequest(position.coords.latitude, position.coords.longitude, request, this.dogWalkerUser);
+    let walkerEmail = getAuth().currentUser.email;
+  console.log("walker email " , walkerEmail);
+    this.dataservice.getWalkerByEmail(walkerEmail).subscribe(res => {
+      console.log("the res " , res);
+      console.log("the walkers profile image , ", this.dogWalkerUser.profileImageUrl);
+      //need to get the current walkers long and lat and add to accept request
+      this.acceptBtns[int] = "Waiting"
+      //then accept the walk request
+      navigator.geolocation.getCurrentPosition((position) => { //use geo location getting the current co ordinates and passing into current location
+        this.googleMapService.currentLocation.next(this.center);
+
+
+        this.dataservice.acceptOwnersWalkRequest(position.coords.latitude, position.coords.longitude, request, this.dogWalkerUser);
+      })
     })
+
   }
   getAvailableWalks() {
   }
@@ -105,9 +123,40 @@ export class FindWalksPage implements OnInit {
       lng: request.lng,
     }
 
-    this.addMarker(request.lat, request.lng);
+    this.addOwnerMarker(request.lat, request.lng);
+    //this.addMarker(request.lat, request.lng);
     this.googleMapService.currentLocation.next(this.center);
 
+  }
+
+  addOwnerMarker(lat, lng) {
+    this.markers.push({
+      position: {
+        lat: lat,
+        lng: lng,
+      },
+      visible: true,
+      opacity: 0.6,
+      label: {
+        color: '#333',
+        text: 'My Label',
+      },
+      title: 'My Title',
+      options: {
+        draggable: false,
+        icon: '../../../../assets/img/map/paw.png'
+      }
+    });
+    this.googleMapService.markers.next(this.markers);
+    this.newLat = "";
+    this.newLong = "";
+  }
+
+  countyChanged() {
+
+    this.dataservice.getActiveRequestsForCounty(this.selectedCounty).subscribe(res => {
+      this.requests = res;
+    })
   }
 
 

@@ -1,3 +1,4 @@
+import { LiveWalkCord } from './../../../services/data.service';
 import { getAuth } from '@angular/fire/auth';
 import { DataService, rapidwalk, DogWalker, Message } from 'src/app/services/data.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -13,6 +14,7 @@ import { takeWhile } from 'rxjs/operators';
   styleUrls: ['./rapid-walk-owner.page.scss'],
 })
 export class RapidWalkOwnerPage implements OnInit {
+  walkerProfileUrl: string;
 
   constructor(private activatedRouter: ActivatedRoute, private dataService: DataService, private googleMapService: GoogleMapService, private router: Router) { }
   @ViewChild('mapel') googlemaps: google.maps.Map;
@@ -24,6 +26,7 @@ export class RapidWalkOwnerPage implements OnInit {
   markersOwner = []
   markersWalker = []
 
+  liveMarkers = [];
   //live walk view
   liveWalkMarkers = []
   //pollyline
@@ -66,6 +69,8 @@ export class RapidWalkOwnerPage implements OnInit {
   reviewText
   rating
 
+  starRating 
+  rapidWalk: rapidwalk
   //chat box 
   ownerEmail
   messages: Message[] = [];
@@ -73,6 +78,9 @@ export class RapidWalkOwnerPage implements OnInit {
   //when the page first initializes
   ngOnInit() {
 
+    this.starRating = 5;
+    //yabe centre the owner 
+    
     //set owner email
     //this.ownerEmail = getAuth().currentUser.email;
 
@@ -96,12 +104,18 @@ export class RapidWalkOwnerPage implements OnInit {
       this.numDogs = data.numberPets;
       this.expectedDuration = data.durationMins;
       this.ownerEmail = data.ownerEmail;
-
+      this.walkerProfileUrl = data.walkerProfileImageUrl;
       //checking if the walk is finished
       if (data.walkStatus == "finished") {
         this.walkFinished = true;
         this.walkEnded();
       }
+
+      if(this.walkInProgress != true ){
+        this.updateMarkerWalker(data.walkerLat, data.walkerLng);
+      }
+      
+ 
 
       //get walker object by email 
       this.dataService.getWalkerByEmail(data.walkerEmail).subscribe((data: DogWalker) => {
@@ -112,12 +126,11 @@ export class RapidWalkOwnerPage implements OnInit {
       //current location next
       this.googleMapService.currentLocation.next(this.center);
 
-      //wait for the walker to arrive at our location
-      this.waitForWalkerToArrive();
+ 
 
       if (data.liveWalkCords == null) {  //if the live walk cords are null it means that the walk is not in progress
         this.addMarkerOwner(data.ownerLat, data.ownerLng);
-        this.addMarkerWalker(data.walkerLat, data.walkerLng);
+        //this.addMarkerWalker(data.walkerLat, data.walkerLng);
         //add the centre to dog walkers lat and ln g
         this.center = {
           lat: data.walkerLat,
@@ -174,7 +187,14 @@ export class RapidWalkOwnerPage implements OnInit {
         }, 100);
 
         //need to add the walkers latest known cords to our markers array
+      
         this.addUpdatedLiveMarker(data.liveWalkCords[data.liveWalkCords.length - 1].lat, data.liveWalkCords[data.liveWalkCords.length - 1].lng);
+        
+        let newLat = data.liveWalkCords[data.liveWalkCords.length - 1].lat;
+        let newLng =  data.liveWalkCords[data.liveWalkCords.length - 1].lng;
+        console.log("the new lat and long value is " , newLat  , " , " , newLng)
+       this.updateMarkerWalker(newLat,newLng);
+       
       }
 
     })
@@ -186,25 +206,79 @@ export class RapidWalkOwnerPage implements OnInit {
 
   //update the live marker
   addUpdatedLiveMarker(lat, lng) {
+
+
     this.liveWalkMarkers.push({
-      location: 'home',
-      position: {
-        lat,
-        lng,
-      },
+      position:{
+        lat: lat,
+        lng: lng,
+     },
+     visible: true,
+     opacity: 0.6,
+     label: {
+        color: '#333',
+        text: 'My Label',
+     },
+     title: 'My Title',
+        options: {
+       draggable: false,
+       icon: '../../../../assets/img/map/lead.png'
+     }
     });
     this.googleMapService.markers.next(this.liveWalkMarkers);
+
+  
   }
 
+  updateMarkerWalker(lat, lng): void {
+    console.log("add updated live marker for walker marker called with lat lng ," , lat , " " , lng);
+    this.markersWalker = [];
+    console.log("markers = ", this.markersWalker);
+    this.markersWalker.push({
+      position:{
+        lat: lat,
+        lng: lng,
+     },
+     visible: true,
+     opacity: 0.6,
+     label: {
+        color: '#333',
+        text: 'My Label',
+     },
+     title: 'My Title',
+        options: {
+       draggable: false,
+       icon: '../../../../assets/img/map/lead.png'
+     }
+    })
+  }
+
+  viewOnMap(){
+    this.center = {
+      lat: this.walkerLat,
+      lng: this.walkerLng,
+    }
+    
+  }
 
   //add a marker for owner given lat lng
   addMarkerOwner(lat, lng): void {                     // pushing the marker we got from current location into array of markers
     this.markersOwner.push({
-      location: 'home',
-      position: {
-        lat,
-        lng,
-      },
+      position:{
+        lat: lat,
+        lng: lng,
+     },
+     visible: true,
+     opacity: 0.6,
+     label: {
+        color: '#333',
+        text: 'My Label',
+     },
+     title: 'My Title',
+        options: {
+       draggable: false,
+       icon: '../../../../assets/img/map/paw.png'
+     }
     });
     this.googleMapService.markers.next(this.markersOwner);
   }
@@ -213,28 +287,30 @@ export class RapidWalkOwnerPage implements OnInit {
 
 
   //add marker for walker given lat and lng
-  addMarkerWalker(lat, lng): void {                     // pushing the marker we got from current location into array of markers
+  addMarkerWalker(lat, lng): void {       
+    console.log("add marker walker trigger ") ;             // pushing the marker we got from current location into array of markers
     this.markersWalker.push({
-      location: 'home',
-      position: {
-        lat,
-        lng,
-      },
+      position:{
+        lat: lat,
+        lng: lng,
+     },
+     visible: true,
+     opacity: 0.6,
+     label: {
+        color: '#333',
+        text: 'My Label',
+     },
+     title: 'My Title',
+        options: {
+       draggable: false,
+       icon: '../../../../assets/img/map/lead.png'
+     }
     });
     this.googleMapService.markers.next(this.markersWalker);
   }
 
 
-  updateMarkerWalker(lat, lng): void {
-    this.markersWalker = [];
-    console.log("markers = ", this.markersWalker);
-    this.markersWalker.push({
-      position: {
-        lat,
-        lng,
-      },
-    })
-  }
+  
 
 
   walkEnded() {
@@ -242,17 +318,11 @@ export class RapidWalkOwnerPage implements OnInit {
     //convert our seconds to hrs m s 
     this.secondsToTime(this.seconds);
   }
-  //wait for walker to arrive  , every set seconds we want to get their updated co ordinates
-  waitForWalkerToArrive() {
-    interval(15000)
-      .pipe(takeWhile(() => !this.walkInProgress))
-      .subscribe(() => {
-        this.dataService.getRapidWalkById(this.rapidWalkId).subscribe(res => {
-          this.updateMarkerWalker(res.walkerLat, res.walkerLng);
-        })
 
-      });
+  selectStars(rating:number){
+    this.starRating = rating; 
   }
+
 
   secondsToTime(secs) {
     var hours = Math.floor(secs / (60 * 60));
@@ -268,7 +338,8 @@ export class RapidWalkOwnerPage implements OnInit {
   postReview() {
     //when a walker wishes to post a review on the owner
     //the rating is /5  
-    this.dataService.postReviewOnWalker(getAuth().currentUser.email, this.walkerEmail, this.rating, this.reviewText);
+    let onerEmail = getAuth().currentUser.email;
+    this.dataService.postReviewOnWalker(onerEmail, this.walkerEmail, this.starRating, this.reviewText);
     this.router.navigate(['/my-walks-owner']);
   }
 
@@ -277,9 +348,11 @@ export class RapidWalkOwnerPage implements OnInit {
     //the walker would like to send a message
     
     //from , text , time
+   
     const d: Date = new Date();
     console.log("sendiung test " , this.messageText);
     this.dataService.sendMessage(this.rapidWalkId ,this.ownerEmail , this.messageText , d);
+    this.messageText = "";
   }
 
 

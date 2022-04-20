@@ -25,7 +25,7 @@
               <ion-col class="stat-col">
                 {{metersToKm(walk.walkDistance)}}Km
               </ion-col>
-              
+            
               <ion-col class="stat-col">
                 € {{walk.price}}
               </ion-col>
@@ -42,22 +42,15 @@
               Dogs Walked
             </ion-row>
             <ion-row>
-              <ion-col>
+              <ion-col *ngFor="let dog of walk.dogs" >
                 <ion-chip>
                   <ion-avatar>
-                    <img src="../../../../assets/img/owner-pets/muller.jpg">
+                    <img [src]="dog.profileImageUrl">
                   </ion-avatar>
-                  <ion-label>Rex</ion-label>
+                  <ion-label>{{dog.name}}</ion-label>
                 </ion-chip>
               </ion-col>
-              <ion-col>
-                <ion-chip>
-                  <ion-avatar>
-                    <img src="../../../../assets/img/owner-pets/muller.jpg">
-                  </ion-avatar>
-                  <ion-label>Muller</ion-label>
-                </ion-chip>
-              </ion-col>
+             
             </ion-row>
             <ion-row>
               Walked by :
@@ -66,7 +59,7 @@
               <ion-col>
                 <ion-chip>
                   <ion-avatar>
-                    <img src="../../../../assets/img/owner-pets/muller.jpg">
+                    <img [src]="walk.walkerProfileImageUrl">
                   </ion-avatar>
                   <ion-label>{{walk.walkerEmail}}</ion-label>
                 </ion-chip>

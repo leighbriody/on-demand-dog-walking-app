@@ -2,6 +2,10 @@ import { AuthService } from './../../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { PhotoService } from 'src/app/services/photo.service';
 
+//loading modal 
+
+import { AlertController, LoadingController } from '@ionic/angular';
+
 @Component({
   selector: 'app-sign-up-owner',
   templateUrl: './sign-up-owner.page.html',
@@ -12,7 +16,11 @@ export class SignUpOwnerPage implements OnInit {
   //set our variables
   email: string;
   password: string;
-
+  fName
+  lName
+  mobile
+  address
+  county
   //track user logged in status
   userLoggedIn: boolean;
 
@@ -26,12 +34,14 @@ export class SignUpOwnerPage implements OnInit {
   imagePath
   storageRef
   imageUrl
-  
 
-  
+
+
+
+
 
   //make injection as we need to access firebase auth
-  constructor(private auth: AuthService, private photoService: PhotoService) { }
+  constructor(private auth: AuthService, private photoService: PhotoService, public loadingController: LoadingController, private alrt: AlertController) { }
 
   ngOnInit() {
     this.imagePath = null;
@@ -42,16 +52,27 @@ export class SignUpOwnerPage implements OnInit {
   }
 
 
-  signUp() {
-    //call sign up as owner method and clear fields
-    this.auth.signUpAsOwner(this.email, this.password);
-    console.log("sign up as owner ts trigger", this.email, this.password);
-    this.email = "";
-    this.password = "";
+  async signUp() {
+
+
+    let signUpSuccess = await this.auth.signUpAsOwner(this.blob, this.fName, this.lName, this.mobile, this.address, this.county, this.email, this.password);
+
+    if(signUpSuccess){
+
+    }else {
+      const loading = await this.loadingController.create({
+        spinner: null,
+        duration: 7000,
+        message: 'Please Wait .. ',
+        translucent: true,
+        cssClass: 'custom-class custom-loading'
+      });
+      return await loading.present();
+    }
   }
 
 
-  deletePhoto(){
+  deletePhoto() {
     this.imagePath = null;
   }
 
@@ -62,6 +83,18 @@ export class SignUpOwnerPage implements OnInit {
       this.blob = res.blob;
       this.imagePath = 'data:image/jpg;base64,' + this.blob;
     })
+  }
+
+
+  async presentLoadingWithOptions() {
+    const loading = await this.loadingController.create({
+      spinner: null,
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+      cssClass: 'custom-class custom-loading'
+    });
+    return await loading.present();
   }
 
 }

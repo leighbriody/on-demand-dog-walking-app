@@ -35,15 +35,19 @@ export class ChooseWalkDetailsPage implements OnInit {
     speed: 400
   };
 
+  profileUrl
   lat
   lng
 
+   dogsMap = new Map<number, Dog>();
   //ref to subscription so we can cancel it
   subscription: Subscription
 
   counter = 0;
   constructor(private dataService: DataService, private router: Router, private googleMapService: GoogleMapService) { }
 
+
+  
   ngOnInit() {
     //on initlaise of this page we need to get the users pets 
     //store in array
@@ -92,8 +96,12 @@ export class ChooseWalkDetailsPage implements OnInit {
         county: data.county,
         eircode: data.eircode,
         phone: data.phone,
-        street: data.street
+        street: data.street,
+        profileImageUrl:data.profileImageUrl,
+       
       }
+
+      console.log("profile imag url from sub " , data.profileImageUrl)
 
       //push to array
       this.dogOwnerArr.push(dogOnwer);
@@ -101,6 +109,7 @@ export class ChooseWalkDetailsPage implements OnInit {
       this.firstNameHere = data.firstName
       this.countyHere = data.county;
       this.emailHere = data.email;
+      this.profileUrl = data.profileImageUrl
 
       //set dog owner object outside of subscribe
       //get current logged in owners geo lat and long and add to request
@@ -110,7 +119,8 @@ export class ChooseWalkDetailsPage implements OnInit {
         const owner = this.dogOwnerArr.pop()
         console.log("dog owner object ", this.dogOwnerArr.pop());
         this.subscription.unsubscribe();
-        this.dataService.sendWalkersRequest(this.dogsSelectedForWalk, this.lat, this.lng, owner.firstName, owner.county, owner.email, this.numberPetsSelected, this.selectedValue, this.walkPrice, this.note);
+      
+        this.dataService.sendWalkersRequest(this.dogsSelectedForWalk, this.lat, this.lng, owner.profileImageUrl , owner.firstName, owner.county, owner.email, this.numberPetsSelected, this.selectedValue, this.walkPrice, this.note);
       })
     })
   }

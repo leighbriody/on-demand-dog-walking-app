@@ -24,6 +24,7 @@ export class MyWalksOwnerPage implements OnInit {
     this.dataService.getAllOwnersWalks(email).subscribe(res => {
       //reverse it so most recent is at the top
       this.allOwnersWalks = res.reverse();
+      
     })
 
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { getAuth } from 'firebase/auth';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService, Dog } from 'src/app/services/data.service';
@@ -14,7 +15,7 @@ export class OwnerPetsPage implements OnInit {
   //data fields
   userLoggedIn: boolean = false;
   ownersPets: Dog[];
-  constructor(private dataService: DataService, private auth: AuthService) {
+  constructor(private dataService: DataService, private auth: AuthService , private alertCtrl :AlertController) {
   }
 
   ngOnInit() {
@@ -24,6 +25,16 @@ export class OwnerPetsPage implements OnInit {
       this.ownersPets = res;
     })
 
+  }
+
+  test(){
+    console.log("test called");
+  }
+
+
+  removePet(petId){
+    console.log("remove called");
+    this.dataService.removePet(getAuth().currentUser.email , petId);
   }
 
 }

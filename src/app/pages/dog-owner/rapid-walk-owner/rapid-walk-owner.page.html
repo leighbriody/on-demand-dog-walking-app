@@ -11,19 +11,20 @@
   <!--Here we will display the map-->
   <google-map #mapel height="60%" width="100%" [zoom]="zoom" [center]="center"  *ngIf="walkFinished == false">
     <!--Owner marker-->
-    <map-marker *ngFor="let marker of markersOwner" [position]="marker.position" [label]="marker.label"
+    <map-marker *ngFor="let marker of markersOwner" [position]="marker.position" 
       [title]="marker.title" [options]="marker.options">
     </map-marker>
 
     <!--walker marker-->
-    <map-marker *ngFor="let marker of markersWalker" [position]="marker.position" [label]="marker.label"
+    <map-marker *ngFor="let marker of markersWalker" [position]="marker.position" 
       [title]="marker.title" [options]="marker.options">
     </map-marker>
 
-    <!--Live Walker markers -->
+  
+    <!--Live Walker markers just want polyline not markers
     <map-marker *ngFor="let marker of liveWalkMarkers" [position]="marker.position" [label]="marker.label"
       [title]="marker.title" [options]="marker.options">
-    </map-marker>
+    </map-marker> -->
     <map-polyline [options]="polylineOptions">
     </map-polyline>
   </google-map>
@@ -58,18 +59,17 @@
   <ion-item>The walker is on their way</ion-item>
     <ion-item lines="none">
       <ion-avatar slot="start">
-        <img src="../../../../assets/img/find-walks/user1.jpg">
+        <img [src]="walkerProfileUrl">
       </ion-avatar>
       <ion-label>
-        <h5> x km away</h5>
         <h2>{{walkerName}}</h2>
         <h3>{{walkerEmail}}</h3>
         <p>
-          <ion-icon name="star-outline"></ion-icon>
-          <ion-icon name="star-outline"></ion-icon>
-          <ion-icon name="star-outline"></ion-icon>
-          <ion-icon name="star-outline"></ion-icon>
-          <ion-icon name="star-outline"></ion-icon>
+          <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
         </p>
         <ion-row>
           <ion-col>
@@ -83,9 +83,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-button>
-          View Walker Location
-        </ion-button>
+     
       </ion-label>
     </ion-item>
   </ion-card>
@@ -173,15 +171,26 @@
       <!--Leave a review-->
       <ion-list lines="none">
         <ion-item>
-          Leave a review
+          Leave a review {{rating}}
         </ion-item>
       </ion-list>
   
       <ion-item>
         <ion-row>
           <ion-col>
-            <ion-label>Rating /5</ion-label>
-            <ion-input  [(ngModel)]="rating"></ion-input>
+           
+            <div class="rate">
+              <input type="radio" id="star5" name="rate" value="5" (click)="selectStars(5)" />
+              <label for="star5" title="text">5 stars</label>
+              <input type="radio" id="star4" name="rate" value="4" (click)="selectStars(4)"/>
+              <label for="star4" title="text">4 stars</label>
+              <input type="radio" id="star3" name="rate" value="3" (click)="selectStars(3)" />
+              <label for="star3" title="text">3 stars</label>
+              <input type="radio" id="star2" name="rate" value="2" (click)="selectStars(2)"/>
+              <label for="star2" title="text">2 stars</label>
+              <input type="radio" id="star1" name="rate" value="1" (click)="selectStars(1)"/>
+              <label for="star1" title="text">1 star</label>
+            </div>
           </ion-col>
         </ion-row>
       </ion-item>
@@ -221,7 +230,7 @@
 
   <!--Chatbox-->
    <!--Chatbox-->
-   <ion-card>
+   <ion-card *ngIf="walkFinished != true">
     <ion-grid>
       <ion-row *ngFor="let message of messages">
         <ion-col col-9 *ngIf="message.from!==ownerEmail" class="message"  [ngClass]="{'mymessage': message.from === ownerEmail, 'othermessage': message.from !== ownerEmail}">

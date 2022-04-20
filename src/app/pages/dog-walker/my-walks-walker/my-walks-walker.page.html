@@ -48,11 +48,26 @@
               <ion-col>
                 <ion-chip>
                   <ion-avatar>
-                    <img src="../../../../assets/img/owner-pets/muller.jpg">
+                    <img [src]="walk.ownerProfileImageUrl">
                   </ion-avatar>
                   <ion-label>{{walk.ownerEmail}}</ion-label>
                 </ion-chip>
               </ion-col>
+            </ion-row>
+              <!--Dogs Walked-->
+            <ion-row>
+              Dogs Walked
+            </ion-row>
+            <ion-row>
+              <ion-col *ngFor="let dog of walk.dogs" >
+                <ion-chip>
+                  <ion-avatar>
+                    <img [src]="dog.profileImageUrl">
+                  </ion-avatar>
+                  <ion-label>{{dog.name}}</ion-label>
+                </ion-chip>
+              </ion-col>
+             
             </ion-row>
         </ion-col>
       </ion-row>

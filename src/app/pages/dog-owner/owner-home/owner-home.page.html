@@ -6,27 +6,24 @@
     <ion-title>Walkies</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
-
-
-
   <!--CALL TO ACTION DIV-->
   <div id="call-to-action-div" (click)="needWalkingRedirect()">
-    <h2 class="welcome-msg" (click)="needWalkingRedirect()">Welcome Back , Billy</h2>
+    <h2 class="welcome-msg" (click)="needWalkingRedirect()">Welcome Back</h2>
     <ion-button class="action-btn" color="light" (click)="needWalkingRedirect()">
       <label (click)="needWalkingRedirect()"> My dog needs walking</label>
     </ion-button>
   </div>
   <img src="../../../../assets/img/owner-home/doglwleadgreen.png">
 
-  <!--MORE ABOUT WALKIES-->
-  <div class="more-div">
-    <h3>What is walkies ?</h3>
-  </div>
-</ion-content>
+<ion-button (click)="test()">
+test 
+</ion-button>
+ 
 
+
+
+</ion-content>
 <!--DOG OWNER TABS-->
 <ion-tabs>
   <ion-fab vertical="bottom" horizontal="center" translucent="true">
