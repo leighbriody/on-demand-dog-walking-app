@@ -151,7 +151,7 @@ export class RapidWalkWalkerPage implements OnInit {
   //this function will fire every x seconds while the walk is not in progress 
   //it will update the walkers current position 
   StartMakinWayToOwner() {
-    interval(15000)
+    interval(1000)
       .pipe(takeWhile(() => !this.walkInProgress))
       .subscribe(() => {
         navigator.geolocation.getCurrentPosition((position) => { //use geo location getting the current co ordinates and passing into current location
@@ -384,7 +384,7 @@ export class RapidWalkWalkerPage implements OnInit {
         //this is messing up
         this.addCordsToDatabase(position.coords.latitude, position.coords.longitude);
       })
-    }).bind(this), 10000);// bind the object to this (this is Loop refference)
+    }).bind(this), 1000);// bind the object to this (this is Loop refference)
 
 
   }

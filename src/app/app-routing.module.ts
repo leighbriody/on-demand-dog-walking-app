@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/logged-out-home',
+    redirectTo: '/landing-page',
     pathMatch: 'full'
   },
   {
@@ -109,10 +109,7 @@ const routes: Routes = [
     path: 'my-walks-owner',
     loadChildren: () => import('./pages/dog-owner/my-walks-owner/my-walks-owner.module').then( m => m.MyWalksOwnerPageModule)
   },
-  {
-    path: 'my-profile-owner',
-    loadChildren: () => import('./pages/dog-owner/my-profile-owner/my-profile-owner.module').then( m => m.MyProfileOwnerPageModule)
-  },
+  
   {
     path: 'upload-image',
     loadChildren: () => import('./pages/dog-owner/upload-image/upload-image.module').then( m => m.UploadImagePageModule)
@@ -120,10 +117,20 @@ const routes: Routes = [
   {
     path: 'upload-image',
     loadChildren: () => import('./pages/dog-owner/upload-image/upload-image.module').then( m => m.UploadImagePageModule)
-  },  {
+  },
+  {
     path: 'walker-profile',
     loadChildren: () => import('./pages/dog-walker/walker-profile/walker-profile.module').then( m => m.WalkerProfilePageModule)
   },
+  {
+    path: 'landing-page',
+    loadChildren: () => import('./pages/auth/landing-page/landing-page.module').then( m => m.LandingPagePageModule)
+  },  {
+    path: 'test',
+    loadChildren: () => import('./pages/dog-owner/test/test.module').then( m => m.TestPageModule)
+  },
+
+
 
 
  

@@ -7,11 +7,8 @@
     <ion-title>Walkies - My Pets</ion-title>
   </ion-toolbar>
 </ion-header>
-
-
 <ion-content>
   <!--LIST OF PETS-->
-
   <ion-grid>
     <ion-row>
       <ion-col sizeLg="6" sizeMd="6" sizeXs="6" *ngFor="let pet of ownersPets">
@@ -38,12 +35,10 @@
               </ion-col>
             </ion-row>
           </ion-card-content>
-
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
-
   <!--ADD PET BTN -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button [routerLink]="['/','add-pet']">
@@ -51,13 +46,7 @@
     </ion-fab-button>
   </ion-fab>
 
-
-
-
-
 </ion-content>
-
-
 <!--DOG OWNER TABS-->
 <ion-tabs>
   <ion-fab vertical="bottom" horizontal="center" translucent="true">
